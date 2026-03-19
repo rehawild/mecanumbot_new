@@ -1,0 +1,30 @@
+[3.571s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/build --no-deps symlink_data
+[4.423s] running develop
+[5.020s] running egg_info
+[5.022s] creating mecanumbot_sensorprocess_smart.egg-info
+[5.024s] writing mecanumbot_sensorprocess_smart.egg-info/PKG-INFO
+[5.026s] writing dependency_links to mecanumbot_sensorprocess_smart.egg-info/dependency_links.txt
+[5.027s] writing entry points to mecanumbot_sensorprocess_smart.egg-info/entry_points.txt
+[5.029s] writing requirements to mecanumbot_sensorprocess_smart.egg-info/requires.txt
+[5.029s] writing top-level names to mecanumbot_sensorprocess_smart.egg-info/top_level.txt
+[5.030s] writing manifest file 'mecanumbot_sensorprocess_smart.egg-info/SOURCES.txt'
+[5.030s] reading manifest file 'mecanumbot_sensorprocess_smart.egg-info/SOURCES.txt'
+[5.030s] writing manifest file 'mecanumbot_sensorprocess_smart.egg-info/SOURCES.txt'
+[5.040s] running build_ext
+[5.041s] Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/lib/python3.10/site-packages/mecanumbot-sensorprocess-smart.egg-link (link to .)
+[5.051s] Installing mecanumbot_lidar_detect_people script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/lib/mecanumbot_sensorprocess_smart
+[5.051s] 
+[5.051s] Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart
+[5.051s] running symlink_data
+[5.052s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/ament_index
+[5.052s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/ament_index/resource_index
+[5.053s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/ament_index/resource_index/packages
+[5.054s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/resource/mecanumbot_sensorprocess_smart -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/ament_index/resource_index/packages
+[5.054s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart
+[5.054s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/config
+[5.054s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/config/lidar_peopledetect_config.yaml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/config
+[5.055s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/models
+[5.055s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/models/dr_spaam_5_on_frog.pth -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/models
+[5.055s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/launch
+[5.055s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/launch/mecanumbot_peopledetect.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/share/mecanumbot_sensorprocess_smart/launch
+[5.152s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart' returned '0': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_sensorprocess_smart/build --no-deps symlink_data

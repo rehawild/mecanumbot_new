@@ -1,0 +1,3 @@
+[console_scripts]
+mecanumbot_ledgui = mecanumbot_ledgui.mecanumbot_ledgui:main
+

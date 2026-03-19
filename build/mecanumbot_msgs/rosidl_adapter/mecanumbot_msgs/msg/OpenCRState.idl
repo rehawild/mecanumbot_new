@@ -1,0 +1,102 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from mecanumbot_msgs/msg/OpenCRState.msg
+// generated code does not contain a copyright notice
+
+#include "std_msgs/msg/Header.idl"
+
+module mecanumbot_msgs {
+  module msg {
+    struct OpenCRState {
+      std_msgs::msg::Header header;
+
+      @verbatim (language="comment", text=
+        "goal velocities for wheels")
+      int16 cmd_vel_bl;
+
+      int16 cmd_vel_br;
+
+      int16 cmd_vel_fl;
+
+      int16 cmd_vel_fr;
+
+      @verbatim (language="comment", text=
+        "measured velocities for wheels")
+      int16 vel_bl;
+
+      int16 vel_br;
+
+      int16 vel_fl;
+
+      int16 vel_fr;
+
+      @verbatim (language="comment", text=
+        "measured positions for wheels")
+      int16 pos_bl;
+
+      int16 pos_br;
+
+      int16 pos_fl;
+
+      int16 pos_fr;
+
+      @verbatim (language="comment", text=
+        "measured currents for wheels")
+      int16 curr_bl;
+
+      int16 curr_br;
+
+      int16 curr_fl;
+
+      int16 curr_fr;
+
+      @verbatim (language="comment", text=
+        "measured accelerations for wheels")
+      int16 acc_bl;
+
+      int16 acc_br;
+
+      int16 acc_fl;
+
+      int16 acc_fr;
+
+      @verbatim (language="comment", text=
+        "goal positions for neck and grabbers")
+      int16 pos_n;
+
+      int16 pos_gl;
+
+      int16 pos_gr;
+
+      @verbatim (language="comment", text=
+        "sensory data" "\n"
+        "IMU data")
+      float battery_voltage;
+
+      float imu_angular_vel_x;
+
+      float imu_angular_vel_y;
+
+      float imu_angular_vel_z;
+
+      float imu_linear_acc_x;
+
+      float imu_linear_acc_y;
+
+      float imu_linear_acc_z;
+
+      float imu_magnetic_x;
+
+      float imu_magnetic_y;
+
+      float imu_magnetic_z;
+
+      float imu_orientation_w;
+
+      float imu_orientation_x;
+
+      float imu_orientation_y;
+
+      float imu_orientation_z;
+    };
+  };
+};

@@ -1,0 +1,2 @@
+source;share/mecanumbot_behaviours/environment/ament_prefix_path.sh
+source;share/mecanumbot_behaviours/environment/path.sh

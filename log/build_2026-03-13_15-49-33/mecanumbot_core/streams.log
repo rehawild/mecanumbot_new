@@ -1,0 +1,25 @@
+[3.841s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/build --no-deps symlink_data
+[4.638s] running develop
+[5.362s] running egg_info
+[5.362s] creating mecanumbot_core.egg-info
+[5.362s] writing mecanumbot_core.egg-info/PKG-INFO
+[5.363s] writing dependency_links to mecanumbot_core.egg-info/dependency_links.txt
+[5.363s] writing entry points to mecanumbot_core.egg-info/entry_points.txt
+[5.364s] writing requirements to mecanumbot_core.egg-info/requires.txt
+[5.364s] writing top-level names to mecanumbot_core.egg-info/top_level.txt
+[5.365s] writing manifest file 'mecanumbot_core.egg-info/SOURCES.txt'
+[5.369s] reading manifest file 'mecanumbot_core.egg-info/SOURCES.txt'
+[5.370s] writing manifest file 'mecanumbot_core.egg-info/SOURCES.txt'
+[5.372s] running build_ext
+[5.376s] Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/lib/python3.10/site-packages/mecanumbot-core.egg-link (link to .)
+[5.378s] Installing mecanumbot_io_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/lib/mecanumbot_core
+[5.378s] Installing mecanumbot_sensorproc_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/lib/mecanumbot_core
+[5.379s] 
+[5.379s] Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core
+[5.379s] running symlink_data
+[5.379s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/share/ament_index
+[5.379s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/share/ament_index/resource_index
+[5.379s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/share/ament_index/resource_index/packages
+[5.380s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/resource/mecanumbot_core -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/share/ament_index/resource_index/packages
+[5.380s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/share/mecanumbot_core
+[5.474s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core' returned '0': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_core/build --no-deps symlink_data

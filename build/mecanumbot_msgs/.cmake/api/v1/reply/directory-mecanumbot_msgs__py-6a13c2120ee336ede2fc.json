@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "mecanumbot_msgs__py",
+		"source" : "/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_msgs/mecanumbot_msgs__py"
+	}
+}

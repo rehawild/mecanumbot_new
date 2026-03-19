@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROS2 Fundamentals — Through Mecanumbot</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #0d1117;
+  --bg3: #161b22;
+  --bg4: #1c2128;
+  --border: #30363d;
+  --cyan: #39d0d8;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --orange: #f0883e;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --text3: #6e7681;
+  --sidebar-w: 256px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.7}
+
+/* ── SIDEBAR ── */
+#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;z-index:100}
+#sidebar-header{padding:18px 16px 12px;border-bottom:1px solid var(--border)}
+#sidebar-header h2{font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase}
+#sidebar-header p{font-size:11px;color:var(--text3);margin-top:2px}
+.nav-search{padding:8px 12px;border-bottom:1px solid var(--border)}
+.nav-search input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:5px 10px;border-radius:6px;font-size:12px;outline:none}
+.nav-search input:focus{border-color:var(--cyan)}
+nav{padding:6px 0;flex:1}
+.nav-section{padding:8px 14px 3px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em}
+nav a{display:flex;align-items:center;gap:8px;padding:5px 14px;color:var(--text2);text-decoration:none;font-size:12px;border-left:2px solid transparent;transition:all .15s}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a.active{color:var(--cyan);border-left-color:var(--cyan);background:rgba(57,208,216,.07)}
+nav a .nav-num{font-size:10px;color:var(--text3);font-weight:700;min-width:16px}
+nav a.active .nav-num{color:var(--cyan)}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sidebar-w)}
+
+/* ── HERO ── */
+#hero{padding:80px 56px 64px;background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 70%);border-bottom:1px solid var(--border);position:relative;overflow:hidden;max-width:none}
+#hero::before{content:'';position:absolute;top:-30%;right:0;width:500px;height:500px;background:radial-gradient(circle,rgba(57,208,216,.05) 0%,transparent 70%);pointer-events:none}
+.hero-tag{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px}
+#hero h1{font-size:44px;font-weight:800;line-height:1.1;margin-bottom:14px}
+#hero h1 span{color:var(--cyan)}
+#hero .sub{font-size:16px;color:var(--text2);max-width:580px;margin-bottom:36px;line-height:1.6}
+.how-to-use{display:flex;gap:16px;flex-wrap:wrap}
+.how-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 18px;flex:1;min-width:180px}
+.how-card h4{font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:5px}
+.how-card p{font-size:12px;color:var(--text2)}
+
+/* ── SECTION ── */
+.concept{padding:64px 56px;border-bottom:1px solid var(--border);max-width:960px}
+.concept-tag{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px}
+.concept h2{font-size:30px;font-weight:800;margin-bottom:6px}
+.concept .oneliner{font-size:16px;color:var(--cyan);font-style:italic;margin-bottom:20px;padding-left:14px;border-left:3px solid var(--cyan)}
+.concept .why{color:var(--text2);line-height:1.75;margin-bottom:28px;max-width:720px;font-size:14px}
+
+/* ── CALLOUT ── */
+.callout{background:rgba(57,208,216,.05);border:1px solid rgba(57,208,216,.25);border-left:4px solid var(--cyan);border-radius:0 8px 8px 0;padding:18px 22px;margin:24px 0}
+.callout-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.callout-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.callout-file{font-size:11px;color:var(--text3);font-family:monospace}
+.callout p{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:8px}
+.callout p:last-child{margin-bottom:0}
+.callout code{background:rgba(57,208,216,.1);padding:1px 6px;border-radius:4px;font-size:12px;font-family:'Consolas','Cascadia Code',monospace;color:var(--cyan)}
+
+/* ── FACTS ── */
+.facts{margin:24px 0}
+.facts h3{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.facts ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.facts li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:8px;padding:6px 10px;background:var(--bg3);border-radius:6px}
+.facts li::before{content:'→';color:var(--cyan);font-size:11px;margin-top:2px;flex-shrink:0}
+.facts li strong{color:var(--text)}
+.facts li code{background:var(--bg4);padding:1px 5px;border-radius:3px;font-size:11px;font-family:monospace;color:var(--orange)}
+
+/* ── CLI SNIPPET ── */
+.cli-wrap{margin:24px 0}
+.cli-wrap h3{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.cli-block{position:relative}
+.cli-block pre{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:16px 20px;font-size:12px;font-family:'Consolas','Cascadia Code',monospace;color:var(--text);line-height:1.6;overflow-x:auto}
+.cli-block pre .comment{color:var(--text3)}
+.cli-block pre .cmd{color:var(--green)}
+.cli-block pre .flag{color:var(--blue)}
+.cli-block pre .topic{color:var(--cyan)}
+.cli-block pre .output{color:var(--text2)}
+.copy-btn{position:absolute;top:8px;right:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:3px 10px;border-radius:5px;font-size:11px;cursor:pointer;transition:all .15s}
+.copy-btn:hover{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.copy-btn.copied{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* ── DIAGRAM ── */
+.diagram-wrap{margin:24px 0;overflow-x:auto}
+.diagram-wrap h3{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:8px 12px;background:var(--bg4);color:var(--text3);font-weight:600;text-align:left;border-bottom:2px solid var(--border)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+code{background:var(--bg4);padding:1px 5px;border-radius:4px;font-size:12px;font-family:'Consolas','Cascadia Code',monospace;color:var(--cyan)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.badge-cyan{background:rgba(57,208,216,.15);color:var(--cyan)}
+.badge-green{background:rgba(63,185,80,.15);color:var(--green)}
+.badge-orange{background:rgba(240,136,62,.15);color:var(--orange)}
+.badge-yellow{background:rgba(210,153,34,.15);color:var(--yellow)}
+.badge-red{background:rgba(248,81,73,.15);color:var(--red)}
+.badge-blue{background:rgba(88,166,255,.15);color:var(--blue)}
+.badge-purple{background:rgba(188,140,255,.15);color:var(--purple)}
+
+/* ── COMPARISON TABLE ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.compare-col{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px}
+.compare-col h4{font-size:12px;font-weight:700;margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em}
+.compare-col ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.compare-col li{font-size:12px;color:var(--text2);padding-left:14px;position:relative}
+.compare-col li::before{content:'•';position:absolute;left:0;color:var(--text3)}
+
+/* ── HIGHLIGHT BOX ── */
+.warn-box{background:rgba(210,153,34,.08);border:1px solid rgba(210,153,34,.3);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:13px;color:var(--text)}
+.warn-box strong{color:var(--yellow)}
+.info-box{background:rgba(88,166,255,.08);border:1px solid rgba(88,166,255,.3);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:13px;color:var(--text)}
+.info-box strong{color:var(--blue)}
+
+/* ── GLOSSARY ── */
+#glossary{padding:64px 56px;max-width:960px}
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:20px}
+.gloss-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
+.gloss-term{font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:4px;font-family:monospace}
+.gloss-def{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+/* ── HIGHLIGHT ── */
+mark.hl{background:rgba(57,208,216,.25);border-radius:2px;color:inherit}
+
+/* ── STEP LIST ── */
+.steps{counter-reset:step;list-style:none;display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.steps li{counter-increment:step;display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text2)}
+.steps li::before{content:counter(step);background:var(--cyan);color:var(--bg);font-size:10px;font-weight:800;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.steps li strong{color:var(--text)}
+
+/* ── SVG SHARED ── */
+.svg-label{font-family:system-ui,sans-serif;font-size:11px;fill:#e6edf3;font-weight:600}
+.svg-sub{font-family:system-ui,sans-serif;font-size:9px;fill:#8b949e}
+.svg-topic{font-family:monospace;font-size:9px;fill:#39d0d8}
+@keyframes dash{to{stroke-dashoffset:-20}}
+.anim{stroke-dasharray:6 4;animation:dash 1.4s linear infinite}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ SIDEBAR ══════════════════ -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h2>ROS2 Fundamentals</h2>
+    <p>Through Mecanumbot · Reading Guide</p>
+  </div>
+  <div class="nav-search">
+    <input type="text" id="page-search" placeholder="Search page..." oninput="doSearch(this.value)">
+  </div>
+  <nav id="nav">
+    <div class="nav-section">Introduction</div>
+    <a href="#hero"><span class="nav-num">—</span>Overview</a>
+    <div class="nav-section">Concepts</div>
+    <a href="#ros2"><span class="nav-num">01</span>What is ROS2?</a>
+    <a href="#nodes"><span class="nav-num">02</span>Nodes</a>
+    <a href="#topics"><span class="nav-num">03</span>Topics &amp; Pub/Sub</a>
+    <a href="#services"><span class="nav-num">04</span>Services</a>
+    <a href="#actions"><span class="nav-num">05</span>Actions</a>
+    <a href="#messages"><span class="nav-num">06</span>Messages</a>
+    <a href="#parameters"><span class="nav-num">07</span>Parameters &amp; YAML</a>
+    <a href="#launch"><span class="nav-num">08</span>Launch Files</a>
+    <a href="#tf"><span class="nav-num">09</span>TF &amp; Frames</a>
+    <a href="#packages"><span class="nav-num">10</span>Packages &amp; Workspaces</a>
+    <a href="#dds"><span class="nav-num">11</span>DDS &amp; Networking</a>
+    <div class="nav-section">Reference</div>
+    <a href="#glossary"><span class="nav-num">—</span>Glossary</a>
+  </nav>
+</div>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<div id="main">
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-tag">ROS2 Humble · Self-Study Guide</div>
+  <h1>ROS2 Fundamentals<br><span>Through Mecanumbot</span></h1>
+  <p class="sub">Every concept explained in plain English, anchored to real code from this project. Read it once to build your mental model, then keep it open as a reference while reading the codebase.</p>
+  <div class="how-to-use">
+    <div class="how-card">
+      <h4>Reading from scratch?</h4>
+      <p>Start at section 01 and read in order. Each concept builds on the last.</p>
+    </div>
+    <div class="how-card">
+      <h4>Looking something up?</h4>
+      <p>Use the sidebar or the search box to jump to any concept instantly.</p>
+    </div>
+    <div class="how-card">
+      <h4>Reading code side-by-side?</h4>
+      <p>Look for the cyan "In Mecanumbot" callouts — they link the concept to the exact file.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 01 — WHAT IS ROS2 ══════════════════ -->
+<section class="concept" id="ros2">
+  <div class="concept-tag">Concept 01</div>
+  <h2>What is ROS2?</h2>
+  <p class="oneliner">A communication framework that lets software modules on one or many computers talk to each other as if they were in the same room.</p>
+  <div class="why">
+    <p>A robot is not one program — it's dozens of programs running simultaneously: a motor driver, a sensor reader, a path planner, a camera processor, a behaviour controller. Each of these needs to send and receive data from the others, often across different hardware, programming languages, and even different physical machines.</p>
+    <p style="margin-top:12px">ROS2 solves this by giving every piece of software a common language for <strong>announcing what it has</strong> (publications) and <strong>asking for what it needs</strong> (subscriptions, service calls). Under the hood it uses a mature industrial protocol called DDS that handles discovery, serialization, quality-of-service, and networking automatically. You just write the logic; ROS2 handles the plumbing.</p>
+    <p style="margin-top:12px">ROS2 is the successor to ROS1. The main improvements: no more single master process (if one node crashes the rest keep running), real-time support, better security, and proper multi-machine networking out of the box.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>The ROS2 Graph — Abstract View</h3>
+    <svg viewBox="0 0 780 180" style="width:100%;max-width:780px" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#39d0d8"/></marker>
+      </defs>
+      <!-- Nodes -->
+      <rect x="10" y="65" width="110" height="50" rx="6" fill="#161b22" stroke="#39d0d8"/>
+      <text x="65" y="85" class="svg-label" text-anchor="middle">Node A</text>
+      <text x="65" y="100" class="svg-sub" text-anchor="middle">e.g. LiDAR driver</text>
+
+      <rect x="240" y="15" width="130" height="50" rx="6" fill="#161b22" stroke="#3fb950"/>
+      <text x="305" y="35" class="svg-label" text-anchor="middle">Node B</text>
+      <text x="305" y="50" class="svg-sub" text-anchor="middle">e.g. Obstacle avoidance</text>
+
+      <rect x="240" y="115" width="130" height="50" rx="6" fill="#161b22" stroke="#bc8cff"/>
+      <text x="305" y="135" class="svg-label" text-anchor="middle">Node C</text>
+      <text x="305" y="150" class="svg-sub" text-anchor="middle">e.g. Person detector</text>
+
+      <rect x="560" y="65" width="130" height="50" rx="6" fill="#161b22" stroke="#d29922"/>
+      <text x="625" y="85" class="svg-label" text-anchor="middle">Node D</text>
+      <text x="625" y="100" class="svg-sub" text-anchor="middle">e.g. Path planner</text>
+
+      <!-- Topic bus -->
+      <rect x="180" y="68" width="40" height="44" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="200" y="88" class="svg-sub" text-anchor="middle">Topic</text>
+      <text x="200" y="100" class="svg-topic" text-anchor="middle">/scan</text>
+
+      <!-- Arrows -->
+      <line x1="120" y1="90" x2="178" y2="90" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a1)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <line x1="222" y1="80" x2="238" y2="50" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a1)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <line x1="222" y1="100" x2="238" y2="130" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a1)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <line x1="372" y1="40" x2="558" y2="80" stroke="#3fb950" stroke-width="1.5" marker-end="url(#a1)"/>
+
+      <!-- Service arrow -->
+      <path d="M 390 140 Q 490 140 558 100" stroke="#bc8cff" stroke-width="1.5" fill="none" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+      <text x="475" y="135" class="svg-sub" text-anchor="middle">service call</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot/ · src/mecanumbot_remote/ · src/mecanumbot_behaviours/</span>
+    </div>
+    <p>The robot splits its workload across <strong>two physical computers</strong>: the Raspberry Pi on the robot and an operator's PC nearby. Both run ROS2 nodes. Because they share the same DDS domain (<code>ROS_DOMAIN_ID=19</code>) and are on the same WiFi network, every topic and service is accessible from either machine — the behaviour tree on the PC can read <code>/mecanumbot/scan</code> produced by the LiDAR on the Pi as if it were local.</p>
+    <p>The Pi runs: <code>mecanumbot_io_node</code>, <code>mecanumbot_sensorproc_node</code>, <code>mecanumbot_led_service_node</code>, the LD08 LiDAR driver, and <code>robot_state_publisher</code>.</p>
+    <p>The PC runs: <code>DrSpaamNode</code> (person detection), the behaviour tree nodes (<code>doglike_leading_bt_node</code> etc.), teleoperation nodes, and Nav2.</p>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>ROS</strong> stands for Robot Operating System — it's a middleware, not a real OS.</li>
+      <li><strong>Version:</strong> This project uses ROS2 Humble on Ubuntu 22.04.</li>
+      <li><strong>Language:</strong> Python and C++ are both first-class. Mecanumbot uses pure Python.</li>
+      <li><strong>No master process:</strong> In ROS1 a central <code>roscore</code> had to run. In ROS2 nodes discover each other via DDS. Kill any node and the rest keep going.</li>
+      <li><strong>Four communication patterns:</strong> Topics (async, broadcast), Services (sync, 1-to-1), Actions (long-running with feedback), Parameters (node configuration).</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># See all running nodes on this ROS_DOMAIN_ID</span>
+<span class="cmd">ros2 node list</span>
+
+<span class="comment"># See the full ROS2 graph (requires rqt)</span>
+<span class="cmd">rqt_graph</span>
+
+<span class="comment"># Check your domain ID</span>
+<span class="cmd">echo $ROS_DOMAIN_ID</span>
+<span class="output">19</span>
+
+<span class="comment"># Set domain ID before launching anything</span>
+<span class="cmd">export ROS_DOMAIN_ID=19</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 02 — NODES ══════════════════ -->
+<section class="concept" id="nodes">
+  <div class="concept-tag">Concept 02</div>
+  <h2>Nodes</h2>
+  <p class="oneliner">A node is a single process that does exactly one job in the robot system.</p>
+  <div class="why">
+    <p>Think of a node like a Unix process with superpowers. It starts up, it has a name, it registers itself with the ROS2 network, and then it either runs in a loop (spinning, processing messages) or sleeps waiting for input. The rule of thumb: <strong>one node, one responsibility</strong>. The motor driver is one node. The sensor converter is another. The person detector is a third.</p>
+    <p style="margin-top:12px">This separation has a practical payoff: you can kill and restart any one node without touching the others. You can run nodes on different machines. You can swap in a fake "mock" node for testing. If nodes were all tangled in one giant program, none of this would be possible.</p>
+    <p style="margin-top:12px">In Python, a ROS2 node is a class that inherits from <code>rclpy.node.Node</code>. The constructor registers the node name. Then a <code>spin()</code> call keeps it alive and processing callbacks.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>Node Anatomy</h3>
+    <svg viewBox="0 0 680 200" style="width:100%;max-width:680px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#39d0d8"/></marker></defs>
+      <!-- Node box -->
+      <rect x="200" y="30" width="280" height="140" rx="8" fill="#161b22" stroke="#39d0d8" stroke-width="1.5"/>
+      <text x="340" y="52" class="svg-label" text-anchor="middle" style="font-size:13px;font-weight:800;fill:#39d0d8">mecanumbot_io_node</text>
+      <!-- Internal items -->
+      <rect x="215" y="62" width="110" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="270" y="76" class="svg-sub" text-anchor="middle">Timer (10 ms)</text>
+      <text x="270" y="86" class="svg-sub" text-anchor="middle">publish opencr_state</text>
+      <rect x="355" y="62" width="110" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="410" y="76" class="svg-sub" text-anchor="middle">Thread</text>
+      <text x="410" y="86" class="svg-sub" text-anchor="middle">read serial port</text>
+      <rect x="215" y="100" width="110" height="26" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="270" y="117" class="svg-sub" text-anchor="middle">Subscriber</text>
+      <text x="270" y="127" class="svg-sub" text-anchor="middle">/cmd_vel</text>
+      <rect x="355" y="100" width="110" height="26" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="410" y="117" class="svg-sub" text-anchor="middle">Publisher</text>
+      <text x="410" y="127" class="svg-sub" text-anchor="middle">/opencr_state</text>
+      <text x="340" y="160" class="svg-sub" text-anchor="middle">Parameters: device_name, baudrate, wheel.*</text>
+
+      <!-- External arrows -->
+      <line x1="50" y1="115" x2="198" y2="115" stroke="#3fb950" stroke-width="1.5" marker-end="url(#a2)"/>
+      <text x="30" y="110" class="svg-sub" text-anchor="middle">/cmd_vel</text>
+      <line x1="482" y1="113" x2="630" y2="113" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a2)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <text x="655" y="110" class="svg-sub">/opencr_state</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot/mecanumbot_core/mecanumbot_core/mecanumbot_IO_node.py</span>
+    </div>
+    <p>Every Python node in this codebase follows the same skeleton:</p>
+    <p><code>class MecanumbotIONode(Node):</code> — inherits from ROS2 Node<br>
+    <code>super().__init__('mecanumbot_io_node')</code> — registers the name on the network<br>
+    <code>self.create_subscription(...)</code> — hooks up incoming topic handlers<br>
+    <code>self.create_publisher(...)</code> — creates an outgoing stream<br>
+    <code>self.create_timer(0.01, self.timer_cb)</code> — runs a function every 10 ms<br>
+    <code>rclpy.spin(node)</code> in <code>main()</code> — keeps the node alive</p>
+    <p>The nine nodes in this repo are: <code>mecanumbot_io_node</code>, <code>mecanumbot_sensorproc_node</code>, <code>mecanumbot_led_service_node</code>, <code>accessory_monitor</code>, <code>wheel_monitor</code>, <code>DrSpaamNode</code>, <code>MecanumbotJoyTeleop</code>, <code>mecanumbot_ledgui_client</code>, plus the three behaviour tree runner nodes.</p>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Node names</strong> must be unique within a domain. Two nodes with the same name cause silent conflicts — see Gotcha #3 in the project docs.</li>
+      <li><strong>Namespaces:</strong> A node can be placed under a namespace like <code>/mecanumbot/</code>. All its topics are automatically prefixed. This is why most topics in this project start with <code>/mecanumbot/</code>.</li>
+      <li><strong>Lifecycle nodes:</strong> ROS2 has a more advanced "managed" node with explicit configure/activate/deactivate states. Mecanumbot uses simple (unmanaged) nodes throughout.</li>
+      <li><strong>Spinning:</strong> <code>rclpy.spin(node)</code> blocks forever and processes callbacks. <code>spin_once()</code> processes one pending callback. The behaviour trees use a custom executor instead of plain <code>spin()</code>.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># List all running nodes</span>
+<span class="cmd">ros2 node list</span>
+<span class="output">/mecanumbot/mecanumbot_io_node
+/mecanumbot/mecanumbot_sensorproc_node
+/mecanumbot/mecanumbot_led_service_node</span>
+
+<span class="comment"># Inspect a node: see its topics, services, and parameters</span>
+<span class="cmd">ros2 node info /mecanumbot/mecanumbot_io_node</span>
+
+<span class="comment"># Check if a specific node is alive</span>
+<span class="cmd">ros2 node list | grep io_node</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 03 — TOPICS ══════════════════ -->
+<section class="concept" id="topics">
+  <div class="concept-tag">Concept 03</div>
+  <h2>Topics &amp; Pub/Sub</h2>
+  <p class="oneliner">A topic is a named data stream — any node can put data in (publish), any node can read data out (subscribe), and they never need to know about each other.</p>
+  <div class="why">
+    <p>Topics are the primary way ROS2 nodes share data. A topic has a <strong>name</strong> (e.g. <code>/mecanumbot/scan</code>) and a <strong>type</strong> (e.g. <code>sensor_msgs/LaserScan</code>). The publisher sends messages whenever it has new data. The subscriber receives them asynchronously via a callback function. Neither side needs to know the other exists.</p>
+    <p style="margin-top:12px">This decoupling is powerful: you can add a new subscriber (e.g. a data recorder) without touching the publisher. You can run the publisher on the Pi and the subscriber on the PC with no code changes. You can kill the subscriber and the publisher keeps running.</p>
+    <p style="margin-top:12px">Topics are <strong>best for continuous data streams</strong>: sensor readings, odometry, velocity commands. They're not the right choice when you need a guaranteed response — use Services for that.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>One Publisher, Multiple Subscribers</h3>
+    <svg viewBox="0 0 700 160" style="width:100%;max-width:700px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a3" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#39d0d8"/></marker></defs>
+      <!-- Publisher -->
+      <rect x="20" y="55" width="120" height="50" rx="6" fill="#161b22" stroke="#f0883e"/>
+      <text x="80" y="75" class="svg-label" text-anchor="middle">io_node</text>
+      <text x="80" y="92" class="svg-sub" text-anchor="middle">Publisher</text>
+      <!-- Topic -->
+      <rect x="200" y="55" width="140" height="50" rx="6" fill="#1c2128" stroke="#39d0d8"/>
+      <text x="270" y="75" class="svg-topic" text-anchor="middle" style="font-size:11px;font-weight:700">/mecanumbot/opencr_state</text>
+      <text x="270" y="92" class="svg-sub" text-anchor="middle">OpenCRState @ 100 Hz</text>
+      <!-- Subscribers -->
+      <rect x="430" y="20" width="130" height="40" rx="6" fill="#161b22" stroke="#3fb950"/>
+      <text x="495" y="38" class="svg-label" text-anchor="middle">sensorproc_node</text>
+      <text x="495" y="52" class="svg-sub" text-anchor="middle">Subscriber</text>
+      <rect x="430" y="100" width="130" height="40" rx="6" fill="#161b22" stroke="#bc8cff"/>
+      <text x="495" y="116" class="svg-label" text-anchor="middle">future_recorder</text>
+      <text x="495" y="130" class="svg-sub" text-anchor="middle">Subscriber (example)</text>
+      <!-- Arrows -->
+      <line x1="140" y1="80" x2="198" y2="80" stroke="#f0883e" stroke-width="1.5" marker-end="url(#a3)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <line x1="340" y1="70" x2="428" y2="45" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a3)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+      <line x1="340" y1="90" x2="428" y2="115" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a3)" stroke-dasharray="5 3" style="animation:dash 1.4s linear infinite"/>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">The three most important topics to understand</span>
+    </div>
+    <p><strong><code>/mecanumbot/opencr_state</code></strong> — The heartbeat of the hardware. <code>io_node</code> publishes this at 100 Hz with all wheel velocities, IMU data, battery voltage, and servo positions. <code>sensorproc_node</code> subscribes to it and converts it into standard ROS2 messages. If this topic stops flowing, the entire sensor pipeline dies silently.</p>
+    <p><strong><code>/cmd_vel</code></strong> — The "move here" command. Nav2 or the teleop joystick publishes a <code>Twist</code> message here. <code>io_node</code> subscribes and converts it to four wheel velocity ticks via mecanum inverse kinematics. This is the single control interface for the wheels.</p>
+    <p><strong><code>/mecanumbot/scan</code></strong> — The LiDAR point cloud. Produced by the LD08 driver, consumed by both Nav2 (obstacle avoidance) and <code>DrSpaamNode</code> (person detection). One publisher, two subscribers — neither knows about the other.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Topic</th><th>Type</th><th>Rate</th><th>Publisher → Subscriber</th></tr>
+      <tr><td><code>/mecanumbot/opencr_state</code></td><td><code>OpenCRState</code></td><td>100 Hz</td><td>io_node → sensorproc_node</td></tr>
+      <tr><td><code>/cmd_vel</code></td><td><code>geometry_msgs/Twist</code></td><td>~10 Hz</td><td>Nav2/teleop → io_node</td></tr>
+      <tr><td><code>/mecanumbot/scan</code></td><td><code>sensor_msgs/LaserScan</code></td><td>~10 Hz</td><td>LD08 driver → DrSpaam + Nav2</td></tr>
+      <tr><td><code>/mecanumbot/odom</code></td><td><code>nav_msgs/Odometry</code></td><td>100 Hz</td><td>sensorproc → Nav2</td></tr>
+      <tr><td><code>/mecanumbot/subject_pose</code></td><td><code>geometry_msgs/PoseStamped</code></td><td>~10 Hz</td><td>DrSpaam → Behaviour Tree</td></tr>
+      <tr><td><code>/goal_pose</code></td><td><code>geometry_msgs/PoseStamped</code></td><td>on demand</td><td>BTree → Nav2</td></tr>
+    </table>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>QoS:</strong> Topics have a Quality of Service policy — reliability (best-effort vs guaranteed), durability, history. Mismatched QoS between publisher and subscriber means messages are silently dropped.</li>
+      <li><strong>Remapping:</strong> Topic names can be remapped at launch. <code>io_node</code> internally subscribes to <code>/cmd_vel</code> but this gets remapped in the launch file to <code>/mecanumbot/cmd_vel</code>.</li>
+      <li><strong>No history by default:</strong> If a subscriber starts after the publisher, it misses all previous messages. Use <code>transient_local</code> durability if you need late-joining subscribers to get the last message.</li>
+      <li><strong>Bandwidth:</strong> At 100 Hz, <code>opencr_state</code> is a significant stream. Over WiFi between Pi and PC this can cause latency if the network is congested.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># List all active topics</span>
+<span class="cmd">ros2 topic list</span>
+
+<span class="comment"># Print messages as they arrive (Ctrl+C to stop)</span>
+<span class="cmd">ros2 topic echo /mecanumbot/opencr_state</span>
+
+<span class="comment"># Check rate of a topic in Hz</span>
+<span class="cmd">ros2 topic hz /mecanumbot/opencr_state</span>
+<span class="output">average rate: 100.003</span>
+
+<span class="comment"># See message type and publisher/subscriber count</span>
+<span class="cmd">ros2 topic info /cmd_vel</span>
+
+<span class="comment"># Publish a single message manually (useful for testing)</span>
+<span class="cmd">ros2 topic pub --once /cmd_vel geometry_msgs/Twist \</span>
+<span class="cmd">  "{linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 04 — SERVICES ══════════════════ -->
+<section class="concept" id="services">
+  <div class="concept-tag">Concept 04</div>
+  <h2>Services</h2>
+  <p class="oneliner">A service is a synchronous call-and-response — the caller asks, the server does something, and the caller waits for a result.</p>
+  <div class="why">
+    <p>Topics are great for continuous streams of data, but sometimes you need a guarantee: "do this thing and tell me if it worked." That's a service. The client sends a <strong>Request</strong>, the server processes it and sends back a <strong>Response</strong>. The client blocks (or uses an async callback) until it gets the response.</p>
+    <p style="margin-top:12px">A service has a name (like <code>/set_led_status</code>) and a type (like <code>mecanumbot_msgs/srv/SetLedStatus</code>) that defines the shape of the request and response. Only one server should exist per service name. Many clients can call it.</p>
+  </div>
+
+  <div class="compare">
+    <div class="compare-col" style="border-top:3px solid var(--cyan)">
+      <h4 style="color:var(--cyan)">Use a Topic when…</h4>
+      <ul>
+        <li>Data flows continuously (sensor readings, velocity)</li>
+        <li>You don't need a response</li>
+        <li>Multiple subscribers need the same data</li>
+        <li>Losing an occasional message is acceptable</li>
+      </ul>
+    </div>
+    <div class="compare-col" style="border-top:3px solid var(--green)">
+      <h4 style="color:var(--green)">Use a Service when…</h4>
+      <ul>
+        <li>You need a success/failure confirmation</li>
+        <li>It's a one-off request (turn on LED, query state)</li>
+        <li>The result must be acted on before proceeding</li>
+        <li>Only one thing should handle the request</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot/mecanumbot_led/mecanumbot_led/led_control_node.py</span>
+    </div>
+    <p>The LED control uses services because the behaviour tree needs to know the LEDs were actually set before continuing. When <code>LEDBehaviourSequence</code> calls <code>/set_led_status</code>, it passes a mode and colour for all four corner LED strips, then waits for a <code>bool success</code> response before the behaviour returns SUCCESS or FAILURE.</p>
+    <p>The <code>LedServiceNode</code> is the server — it receives the request, builds a 12-byte packet (with XOR checksum), sends it over serial to the Arduino Nano, reads the Arduino's acknowledgment, and returns the result.</p>
+    <p>The <code>mecanumbot_ledgui_client</code> (the Tkinter GUI) is a separate client of the same service — you can use both simultaneously without changing any server code.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Service</th><th>Type</th><th>Server</th><th>What it does</th></tr>
+      <tr><td><code>/set_led_status</code></td><td><code>SetLedStatus</code></td><td>led_service_node</td><td>Set animation mode + colour for all 4 LED strips. Returns bool success.</td></tr>
+      <tr><td><code>/get_led_status</code></td><td><code>GetLedStatus</code></td><td>led_service_node</td><td>Read back the current LED state. Used by the GUI.</td></tr>
+    </table>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Synchronous by default:</strong> The client blocks until the server responds. If the server crashes mid-call, the client hangs. Always set a timeout when calling services in production.</li>
+      <li><strong>Service types:</strong> Defined in <code>.srv</code> files with a <code>---</code> separator between request fields (above) and response fields (below).</li>
+      <li><strong>Not for streaming:</strong> Calling a service in a tight loop is inefficient and defeats the purpose. Use a topic instead.</li>
+      <li><strong>Only one server:</strong> Unlike topics (where many publishers can exist), a service should have exactly one server. Two servers on the same service name cause undefined behavior.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># List all available services</span>
+<span class="cmd">ros2 service list</span>
+
+<span class="comment"># Show the request/response structure of a service</span>
+<span class="cmd">ros2 interface show mecanumbot_msgs/srv/SetLedStatus</span>
+<span class="output">int8 fl_mode
+int8 fl_color
+...
+---
+bool success
+string message</span>
+
+<span class="comment"># Call the LED service (all solid white)</span>
+<span class="cmd">ros2 service call /set_led_status mecanumbot_msgs/srv/SetLedStatus \</span>
+<span class="cmd">  "{fl_mode: 4, fl_color: 1, fr_mode: 4, fr_color: 1, br_mode: 4, br_color: 1, bl_mode: 4, bl_color: 1}"</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 05 — ACTIONS ══════════════════ -->
+<section class="concept" id="actions">
+  <div class="concept-tag">Concept 05</div>
+  <h2>Actions</h2>
+  <p class="oneliner">An action is like a service that can take a long time — with progress feedback and the ability to cancel mid-flight.</p>
+  <div class="why">
+    <p>Some robot tasks take seconds or even minutes: "navigate to this pose", "pick up the object", "scan the room". A plain service can't handle these — the caller would block indefinitely. An action solves this with three-phase communication: <strong>Goal</strong> (client sends what to do), <strong>Feedback</strong> (server sends progress updates), <strong>Result</strong> (server sends final outcome).</p>
+    <p style="margin-top:12px">Crucially, the client can <strong>cancel</strong> a goal at any time. Nav2 uses actions heavily — "navigate to pose" is an action where the robot sends periodic feedback about its current position and estimated time to goal.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>Action Flow Timeline</h3>
+    <svg viewBox="0 0 700 130" style="width:100%;max-width:700px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a4" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#39d0d8"/></marker></defs>
+      <!-- Timeline -->
+      <line x1="60" y1="65" x2="640" y2="65" stroke="#30363d" stroke-width="1.5"/>
+      <!-- Client -->
+      <text x="30" y="40" class="svg-label" text-anchor="middle">Client</text>
+      <text x="30" y="90" class="svg-label" text-anchor="middle">Server</text>
+      <!-- Goal -->
+      <line x1="100" y1="40" x2="100" y2="90" stroke="#d29922" stroke-width="1.5" marker-end="url(#a4)"/>
+      <text x="100" y="115" class="svg-sub" text-anchor="middle">Goal</text>
+      <!-- Feedback loop -->
+      <line x1="220" y1="88" x2="220" y2="40" stroke="#3fb950" stroke-width="1" marker-end="url(#a4)" stroke-dasharray="3 2"/>
+      <text x="220" y="115" class="svg-sub" text-anchor="middle">Feedback</text>
+      <line x1="350" y1="88" x2="350" y2="40" stroke="#3fb950" stroke-width="1" marker-end="url(#a4)" stroke-dasharray="3 2"/>
+      <text x="350" y="115" class="svg-sub" text-anchor="middle">Feedback</text>
+      <line x1="480" y1="88" x2="480" y2="40" stroke="#3fb950" stroke-width="1" marker-end="url(#a4)" stroke-dasharray="3 2"/>
+      <text x="480" y="115" class="svg-sub" text-anchor="middle">Feedback</text>
+      <!-- Result -->
+      <line x1="600" y1="88" x2="600" y2="40" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a4)"/>
+      <text x="600" y="115" class="svg-sub" text-anchor="middle">Result</text>
+      <!-- Labels -->
+      <text x="100" y="25" class="svg-sub" text-anchor="middle" style="fill:#d29922">send goal</text>
+      <text x="600" y="25" class="svg-sub" text-anchor="middle" style="fill:#39d0d8">SUCCEEDED</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot_behaviours/mecanumbot_leading_behaviour/behaviours/movement_managers.py</span>
+    </div>
+    <p>The behaviour tree uses the Nav2 <code>/navigate_to_pose</code> action to move the robot. The <code>TurnToward</code> and <code>Approach</code> behaviour classes send a <code>PoseStamped</code> goal, then monitor the action status on the <code>/navigate_to_pose/_action/status</code> topic. They return <code>RUNNING</code> while Nav2 is still executing, and <code>SUCCESS</code> or <code>FAILURE</code> when the action completes.</p>
+    <p>This is why the behaviour tree doesn't block — it just polls the action status each tick (every 10 ms or 100 ms depending on the tree). The robot is physically moving during all those RUNNING ticks.</p>
+    <p>Note: the behaviours send goals via the simpler <code>/goal_pose</code> topic rather than the full action client API, and read the action status separately. This is a lightweight alternative to using an ActionClient directly.</p>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Three components:</strong> Goal (client → server), Feedback (server → client, repeated), Result (server → client, once at end).</li>
+      <li><strong>Cancellable:</strong> Client can cancel a goal at any time. Server should respect cancellation requests gracefully.</li>
+      <li><strong>Status values:</strong> <code>ACCEPTED</code>, <code>EXECUTING</code>, <code>CANCELING</code>, <code>SUCCEEDED</code>, <code>CANCELED</code>, <code>ABORTED</code>.</li>
+      <li><strong>Under the hood:</strong> Actions are built on top of topics and services. ROS2 creates a bundle of communication channels automatically when you define an action server.</li>
+      <li><strong>Nav2 actions in this project:</strong> <code>/navigate_to_pose</code>, <code>/follow_path</code>, <code>/compute_path_to_pose</code>.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># List all action servers</span>
+<span class="cmd">ros2 action list</span>
+<span class="output">/navigate_to_pose
+/follow_path</span>
+
+<span class="comment"># Show action type definition</span>
+<span class="cmd">ros2 action info /navigate_to_pose</span>
+
+<span class="comment"># Send a navigation goal manually (x=1.0, y=0.5 in map frame)</span>
+<span class="cmd">ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \</span>
+<span class="cmd">  "{pose: {header: {frame_id: map}, pose: {position: {x: 1.0, y: 0.5}}}}"</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 06 — MESSAGES ══════════════════ -->
+<section class="concept" id="messages">
+  <div class="concept-tag">Concept 06</div>
+  <h2>Messages</h2>
+  <p class="oneliner">A message is a typed data structure — it defines exactly what information flows through a topic or a service.</p>
+  <div class="why">
+    <p>Every topic has a type. <code>/cmd_vel</code> carries <code>geometry_msgs/Twist</code>. <code>/mecanumbot/scan</code> carries <code>sensor_msgs/LaserScan</code>. The type is defined in a <code>.msg</code> file that lists fields with their types, like a struct or dataclass. ROS2 compiles these definitions into code so your Python gets auto-complete and type safety.</p>
+    <p style="margin-top:12px">ROS2 ships with a large library of standard messages: <code>std_msgs</code>, <code>geometry_msgs</code>, <code>sensor_msgs</code>, <code>nav_msgs</code>. When the standard messages don't fit, you define custom ones — which is exactly what this project does in <code>mecanumbot_msgs</code>.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot_msgs/mecanumbot_msgs/msg/</span>
+    </div>
+    <p><strong>OpenCRState.msg</strong> — The biggest custom message. It carries the entire telemetry snapshot from the OpenCR firmware: 4 × commanded velocity, 4 × measured velocity, 4 × position, 4 × current, 4 × acceleration (all as <code>int16</code> ticks), plus 3 servo positions, battery voltage, and 13 IMU floats. Total: 27 int16 fields + 14 float32 fields. The YAML overrides payload format to <code>&lt;23h14f</code> — so the four <code>err_*</code> fields exist in the message definition but are always zero.</p>
+    <p><strong>AccessMotorCmd.msg</strong> — Three float32 fields: <code>n_pos</code> (neck), <code>gl_pos</code> (left gripper), <code>gr_pos</code> (right gripper). Values in radians, scaled ×100 inside io_node before transmitting over serial.</p>
+    <p><strong>Twist</strong> (from geometry_msgs) — Used for <code>/cmd_vel</code>. Two vectors: <code>linear</code> (x, y, z velocity in m/s) and <code>angular</code> (x, y, z angular velocity in rad/s). For a ground robot, only <code>linear.x</code> (forward), <code>linear.y</code> (strafe), and <code>angular.z</code> (rotation) matter. Mecanum wheels use all three.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Message</th><th>Package</th><th>Used for</th></tr>
+      <tr><td><code>OpenCRState</code></td><td>mecanumbot_msgs</td><td>Raw hardware telemetry from OpenCR (custom)</td></tr>
+      <tr><td><code>AccessMotorCmd</code></td><td>mecanumbot_msgs</td><td>Neck + gripper servo commands (custom)</td></tr>
+      <tr><td><code>geometry_msgs/Twist</code></td><td>ROS2 standard</td><td>/cmd_vel — velocity commands</td></tr>
+      <tr><td><code>geometry_msgs/PoseStamped</code></td><td>ROS2 standard</td><td>Goal poses and subject_pose</td></tr>
+      <tr><td><code>sensor_msgs/LaserScan</code></td><td>ROS2 standard</td><td>LiDAR point data</td></tr>
+      <tr><td><code>sensor_msgs/Imu</code></td><td>ROS2 standard</td><td>IMU orientation + angular velocity</td></tr>
+      <tr><td><code>nav_msgs/Odometry</code></td><td>ROS2 standard</td><td>Robot position estimate</td></tr>
+      <tr><td><code>sensor_msgs/JointState</code></td><td>ROS2 standard</td><td>Wheel + servo joint angles for URDF</td></tr>
+    </table>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Field types:</strong> bool, int8/16/32/64, float32/64, string, time, duration, and arrays of any of these. Can nest other message types.</li>
+      <li><strong>The <code>header</code> field:</strong> Most sensor messages include a <code>std_msgs/Header</code> with a timestamp and <code>frame_id</code>. The frame_id tells you which coordinate frame the data is in — essential for TF.</li>
+      <li><strong>.msg files:</strong> Each line is <code>type field_name</code>. Lines starting with <code>#</code> are comments. A <code>---</code> separator divides request/response in <code>.srv</code> files.</li>
+      <li><strong>Serialization:</strong> Messages are automatically serialized/deserialized by DDS. You never touch raw bytes in Python.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># Show field definitions of any message type</span>
+<span class="cmd">ros2 interface show mecanumbot_msgs/msg/OpenCRState</span>
+
+<span class="comment"># Show field definitions of a standard message</span>
+<span class="cmd">ros2 interface show geometry_msgs/msg/Twist</span>
+<span class="output">Vector3  linear
+  float64 x
+  float64 y
+  float64 z
+Vector3  angular
+  ...</span>
+
+<span class="comment"># List all messages in a package</span>
+<span class="cmd">ros2 interface list | grep mecanumbot_msgs</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 07 — PARAMETERS ══════════════════ -->
+<section class="concept" id="parameters">
+  <div class="concept-tag">Concept 07</div>
+  <h2>Parameters &amp; YAML</h2>
+  <p class="oneliner">Parameters are named configuration values attached to a node — they let you change behaviour without touching the code.</p>
+  <div class="why">
+    <p>Hardcoding values like baud rates, wheel radii, or confidence thresholds inside source code is fragile — every change requires a recompile or at least a code edit. ROS2 parameters solve this: a node declares what values it accepts (with types and defaults), and at launch time a YAML file can override any of them. The node reads the values with <code>self.declare_parameter()</code> and <code>self.get_parameter().value</code>.</p>
+    <p style="margin-top:12px">Parameters can also be changed <em>at runtime</em> without restarting the node, via <code>ros2 param set</code>. Nodes can register a callback to respond to changes immediately.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot/mecanumbot_description/param/mecanumbot.yaml</span>
+    </div>
+    <p>The <code>mecanumbot.yaml</code> file is loaded at launch by <code>launch_mecanumbot_base.launch.py</code>. It overrides the default values declared in the node constructors. Two overrides that matter:</p>
+    <p><strong>Baud rate:</strong> <code>mecanumbot_IO_node.py</code> declares <code>dev_params.baudrate</code> with default <code>1000000</code>. The YAML sets it to <code>57600</code>. Without this YAML the serial port would open at the wrong speed and receive only garbage.</p>
+    <p><strong>Packet format:</strong> The code default is <code>&lt;27h14f</code> (82 bytes) but the YAML sets <code>&lt;23h14f</code> (74 bytes). If you update the OpenCR firmware and it starts sending 82-byte packets, you must change this YAML — otherwise every packet will be misread.</p>
+    <p>The YAML is organized as nested keys: <code>node_name.ros__parameters.group.field: value</code>. The <code>ros__parameters</code> key (double underscore) is the ROS2 convention.</p>
+  </div>
+
+  <div class="cli-block">
+    <pre><span class="comment"># mecanumbot.yaml structure (simplified)</span>
+mecanumbot_io_node:
+  ros__parameters:
+    dev_params:
+      device_name: "/dev/ttyACM0"
+      baudrate: 57600          <span class="comment"># overrides code default of 1000000</span>
+    packet_params:
+      payload_fmt: "&lt;23h14f"  <span class="comment"># overrides code default of &lt;27h14f</span>
+    robot_params:
+      wheel:
+        radius: 0.0325
+        separation_x: 0.129
+        separation_y: 0.300</pre>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ Code default vs YAML override:</strong> When reading a node's source code, the value in <code>declare_parameter('x', DEFAULT)</code> is <em>not</em> what the node uses in production. Always check the YAML file too. In mecanumbot, the baud rate and packet format defaults in the code are both wrong for the actual hardware — only the YAML makes it work.
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Declare first:</strong> A node must call <code>declare_parameter(name, default)</code> before it can use <code>get_parameter(name)</code>. Trying to get an undeclared parameter throws an exception.</li>
+      <li><strong>Types:</strong> bool, int, float, string, lists of these. Type is inferred from the default value or can be declared explicitly.</li>
+      <li><strong>Nested params:</strong> Accessed with dot notation: <code>dev_params.baudrate</code>. The YAML mirrors this with nested keys.</li>
+      <li><strong>Runtime changes:</strong> <code>ros2 param set /node_name param_name value</code> changes a parameter live. Not all nodes respond to changes — depends on whether a callback was registered.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># List all parameters of a node</span>
+<span class="cmd">ros2 param list /mecanumbot/mecanumbot_io_node</span>
+
+<span class="comment"># Read a parameter value</span>
+<span class="cmd">ros2 param get /mecanumbot/mecanumbot_io_node dev_params.baudrate</span>
+<span class="output">Integer value is: 57600</span>
+
+<span class="comment"># Change a parameter at runtime (if the node supports it)</span>
+<span class="cmd">ros2 param set /mecanumbot/mecanumbot_io_node dev_params.baudrate 115200</span>
+
+<span class="comment"># Dump all parameters to a YAML file</span>
+<span class="cmd">ros2 param dump /mecanumbot/mecanumbot_io_node</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 08 — LAUNCH FILES ══════════════════ -->
+<section class="concept" id="launch">
+  <div class="concept-tag">Concept 08</div>
+  <h2>Launch Files</h2>
+  <p class="oneliner">A launch file is a Python script that starts multiple nodes at once, with their parameters, namespaces, and remappings configured in one place.</p>
+  <div class="why">
+    <p>A robot has many nodes. Starting them one by one with <code>ros2 run</code> is tedious and error-prone — you'd have to get the order, parameters, and namespaces exactly right every time. A launch file automates this. It's a Python script that returns a <code>LaunchDescription</code> — a list of things to start.</p>
+    <p style="margin-top:12px">Launch files can: start nodes (with parameters), include other launch files, set environment variables, remap topic names, conditionally include things based on arguments. They're composable — the mecanumbot base launch includes a separate state publisher launch, which includes the robot description.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/mecanumbot/mecanumbot_bringup/launch/launch_mecanumbot_base.launch.py</span>
+    </div>
+    <p>The base launch file starts everything the robot needs to move and sense. Key things it does:</p>
+    <ol class="steps" style="margin-top:10px">
+      <li><strong>Locates the parameter file</strong> — uses <code>get_package_share_directory</code> to find <code>mecanumbot.yaml</code> regardless of install path.</li>
+      <li><strong>Starts mecanumbot_io_node</strong> — loads YAML params, sets namespace to <code>/mecanumbot</code>, remaps <code>/cmd_vel</code> to <code>/mecanumbot/cmd_vel</code>.</li>
+      <li><strong>Starts mecanumbot_sensorproc_node</strong> — same YAML, same namespace.</li>
+      <li><strong>Starts the LD08 LiDAR driver</strong> — device <code>/dev/ttyUSB0</code>, output topic <code>/mecanumbot/scan</code>.</li>
+      <li><strong>Includes the state publisher launch</strong> — which starts <code>robot_state_publisher</code> with the URDF model.</li>
+    </ol>
+    <p style="margin-top:10px">The <code>namespace='mecanumbot'</code> argument in the node declaration is why all topics from these nodes appear under <code>/mecanumbot/</code>. Without it, <code>opencr_state</code> would be at <code>/opencr_state</code> and would collide with any other robot on the network.</p>
+  </div>
+
+  <div class="cli-block">
+    <pre><span class="comment"># Skeleton of a launch file</span>
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+
+def generate_launch_description():
+    params = get_package_share_directory('mecanumbot_description') + '/param/mecanumbot.yaml'
+
+    return LaunchDescription([
+        Node(
+            package='mecanumbot_core',
+            executable='mecanumbot_io_node',
+            name='mecanumbot_io_node',
+            namespace='mecanumbot',
+            parameters=[params],
+            remappings=[('/cmd_vel', '/mecanumbot/cmd_vel')],
+        ),
+        <span class="comment"># ... more nodes</span>
+    ])</pre>
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Must define <code>generate_launch_description()</code>:</strong> This is the entry point ROS2 calls. It must return a <code>LaunchDescription</code>.</li>
+      <li><strong>IncludeLaunchDescription:</strong> You can nest launch files. The base launch includes the state publisher launch, keeping concerns separate.</li>
+      <li><strong>Arguments:</strong> Launch files can accept command-line arguments with <code>DeclareLaunchArgument</code>, letting you e.g. toggle simulation mode.</li>
+      <li><strong>Package discovery:</strong> <code>get_package_share_directory('pkg_name')</code> finds the installed share directory — the right way to locate YAML/URDF files at launch time.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># Launch the robot base nodes</span>
+<span class="cmd">ros2 launch mecanumbot_bringup launch_mecanumbot_base.launch.py</span>
+
+<span class="comment"># Launch with argument override</span>
+<span class="cmd">ros2 launch mecanumbot_bringup launch_mecanumbot_base.launch.py use_sim_time:=true</span>
+
+<span class="comment"># List available launch files in a package</span>
+<span class="cmd">ros2 launch mecanumbot_bringup --show-arguments launch_mecanumbot_base.launch.py</span>
+
+<span class="comment"># List launch files without running them</span>
+<span class="cmd">ros2 pkg prefix mecanumbot_bringup</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 09 — TF ══════════════════ -->
+<section class="concept" id="tf">
+  <div class="concept-tag">Concept 09</div>
+  <h2>TF &amp; Coordinate Frames</h2>
+  <p class="oneliner">TF maintains a live tree of coordinate frames and can instantly answer "where is point X in frame Y right now?"</p>
+  <div class="why">
+    <p>A robot's sensors are attached at different places and orientations. The LiDAR is at the robot's centre. The camera is on the neck servo which is angled. The wheel encoders tell you how far the robot moved in the world. When the DR-SPAAM detector says "person at (1.2, 0.4) relative to the LiDAR", you need to convert that to map coordinates before giving it to the behaviour tree. That conversion requires knowing the full chain of transforms from LiDAR to robot body to odom to map — at the exact right timestamp.</p>
+    <p style="margin-top:12px">TF does this automatically. Nodes <em>broadcast</em> transforms (parent frame → child frame, at a given time). TF accumulates them into a tree. Any other node can then <em>look up</em> any transform in the tree, even between frames that don't share an edge, by chaining through the tree.</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>Mecanumbot TF Tree</h3>
+    <svg viewBox="0 0 600 220" style="width:100%;max-width:600px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a5" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8b949e"/></marker></defs>
+      <!-- Frames top to bottom -->
+      <rect x="220" y="10" width="100" height="32" rx="5" fill="#1c2128" stroke="#d29922"/>
+      <text x="270" y="30" class="svg-sub" text-anchor="middle" style="fill:#d29922;font-weight:700">map</text>
+      <line x1="270" y1="42" x2="270" y2="62" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a5)"/>
+      <text x="290" y="56" class="svg-sub">AMCL (Nav2)</text>
+
+      <rect x="220" y="64" width="100" height="32" rx="5" fill="#1c2128" stroke="#f0883e"/>
+      <text x="270" y="84" class="svg-sub" text-anchor="middle" style="fill:#f0883e;font-weight:700">odom</text>
+      <line x1="270" y1="96" x2="270" y2="116" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a5)"/>
+      <text x="290" y="110" class="svg-sub">sensorproc_node</text>
+
+      <rect x="200" y="118" width="140" height="32" rx="5" fill="#1c2128" stroke="#39d0d8"/>
+      <text x="270" y="138" class="svg-sub" text-anchor="middle" style="fill:#39d0d8;font-weight:700">base_footprint</text>
+      <line x1="270" y1="150" x2="270" y2="170" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a5)"/>
+      <text x="310" y="164" class="svg-sub">robot_state_publisher</text>
+
+      <rect x="200" y="172" width="140" height="32" rx="5" fill="#1c2128" stroke="#3fb950"/>
+      <text x="270" y="192" class="svg-sub" text-anchor="middle" style="fill:#3fb950;font-weight:700">base_link</text>
+      <!-- Branches to children -->
+      <line x1="200" y1="188" x2="110" y2="188" stroke="#30363d" stroke-width="1"/>
+      <line x1="110" y1="188" x2="110" y2="210" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a5)"/>
+      <rect x="60" y="208" width="100" height="24" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="110" y="224" class="svg-sub" text-anchor="middle">imu_link</text>
+
+      <line x1="340" y1="188" x2="430" y2="188" stroke="#30363d" stroke-width="1"/>
+      <line x1="430" y1="188" x2="430" y2="210" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a5)"/>
+      <rect x="380" y="208" width="100" height="24" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="430" y="224" class="svg-sub" text-anchor="middle">laser_link</text>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">mecanumbot_sensorproc_node.py · robot_state_publisher · Nav2 AMCL</span>
+    </div>
+    <p><strong>Who broadcasts what:</strong></p>
+    <p><code>mecanumbot_sensorproc_node</code> broadcasts <code>odom → base_footprint</code> at 100 Hz. This is the wheel-odometry transform — it integrates the mecanum forward kinematics to give the robot's estimated position relative to where it started.</p>
+    <p><code>robot_state_publisher</code> reads the URDF model and broadcasts all the fixed transforms: <code>base_footprint → base_link → imu_link → laser_link → camera_link</code>, etc. These never move relative to each other (unless the neck servo moves, which updates the neck joint state).</p>
+    <p>Nav2's AMCL node broadcasts <code>map → odom</code>. This is the localization correction — it shifts the odom frame so the robot's position in the map frame matches the particle filter estimate. Without this transform, the robot has no idea where it is on the pre-built map.</p>
+    <p><strong>DR-SPAAM</strong> transforms its detections from <code>laser_link</code> frame to <code>map</code> frame using TF lookups — that's how a LiDAR reading becomes a map-frame position the behaviour tree can navigate to.</p>
+  </div>
+
+  <div class="info-box">
+    <strong>Key insight:</strong> When you see <code>frame_id</code> in a message header, that tells you which frame the data is expressed in. <code>sensor_msgs/LaserScan</code> from the LD08 has <code>frame_id: "laser_link"</code>. To use those points in path planning you need to transform them to the <code>map</code> frame. TF makes that a single function call.
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>TF tree must be connected:</strong> Every frame must have a path to every other frame via the tree. A disconnected frame causes <code>tf2.LookupException</code>. If a node dies, its transforms stop updating and lookups start throwing <code>ExtrapolationException</code>.</li>
+      <li><strong>Static vs dynamic transforms:</strong> Static transforms (fixed mounting positions from URDF) are broadcast by <code>robot_state_publisher</code>. Dynamic transforms (odometry, localization) are broadcast by sensor processing nodes.</li>
+      <li><strong>Time matters:</strong> Every transform is stamped. TF interpolates between the nearest timestamps. If you ask for a transform at a time too far in the past, it fails.</li>
+      <li><strong>base_footprint vs base_link:</strong> <code>base_footprint</code> is the robot's position projected onto the floor (z=0). <code>base_link</code> is the robot's physical centre, slightly above the floor. Nav2 prefers <code>base_footprint</code> for 2D navigation.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># Visualise the full TF tree (saves a PDF)</span>
+<span class="cmd">ros2 run tf2_tools view_frames</span>
+
+<span class="comment"># Print the current transform between two frames</span>
+<span class="cmd">ros2 run tf2_ros tf2_echo odom base_footprint</span>
+<span class="output">Translation: [0.12, 0.05, 0.0]
+Rotation (quaternion): [0.0, 0.0, 0.123, 0.992]</span>
+
+<span class="comment"># Check if the map→odom transform exists (AMCL running?)</span>
+<span class="cmd">ros2 run tf2_ros tf2_echo map odom</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 10 — PACKAGES ══════════════════ -->
+<section class="concept" id="packages">
+  <div class="concept-tag">Concept 10</div>
+  <h2>Packages &amp; Workspaces</h2>
+  <p class="oneliner">A package is the unit of code organisation in ROS2; a workspace is the folder that contains all the packages you're building together.</p>
+  <div class="why">
+    <p>All ROS2 code lives in packages. A package has a <code>package.xml</code> (metadata: name, version, dependencies) and either a <code>CMakeLists.txt</code> (C++ or mixed) or a <code>setup.py</code> (pure Python). The build tool <code>colcon</code> scans the workspace for packages, figures out the dependency order, and builds them all.</p>
+    <p style="margin-top:12px">After building, nodes are run with <code>ros2 run package_name executable_name</code>. Launch files are run with <code>ros2 launch package_name file.launch.py</code>. The <code>install/</code> directory (created by colcon) is what ROS2 actually uses at runtime — not <code>src/</code>.</p>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">src/ — four top-level source groups</span>
+    </div>
+    <p>The workspace root is <code>D:/mecanumbot_new/</code>. Source code lives in <code>src/</code>. After running <code>colcon build</code>, the <code>install/</code> directory is created with all compiled packages.</p>
+    <p>The four source groups follow a clean deployment split:</p>
+    <div class="tbl-wrap" style="margin-top:8px"><table>
+      <tr><th>Directory</th><th>Packages</th><th>Runs on</th></tr>
+      <tr><td><code>src/mecanumbot/</code></td><td>mecanumbot, mecanumbot_bringup, mecanumbot_core, mecanumbot_description, mecanumbot_led, mecanumbot_monitor</td><td>Raspberry Pi</td></tr>
+      <tr><td><code>src/mecanumbot_msgs/</code></td><td>mecanumbot_msgs</td><td>Both (must be built on both machines)</td></tr>
+      <tr><td><code>src/mecanumbot_behaviours/</code></td><td>mecanumbot_behaviours, mecanumbot_leading_behaviour</td><td>PC</td></tr>
+      <tr><td><code>src/mecanumbot_remote/</code></td><td>mecanumbot_ledgui, mecanumbot_sensorprocess_smart, mecanumbot_teleop</td><td>PC</td></tr>
+    </table></div>
+    <p style="margin-top:10px"><code>mecanumbot_msgs</code> must be built on <em>both</em> machines because the Pi's nodes and the PC's nodes both use the custom message types — the DDS layer needs to know the serialization format on both ends.</p>
+  </div>
+
+  <div class="info-box">
+    <strong>The meta-package pattern:</strong> <code>mecanumbot</code> and <code>mecanumbot_behaviours</code> are "meta-packages" — they contain only a <code>package.xml</code> with no code. Their purpose is grouping: <code>sudo apt install ros-humble-mecanumbot</code> would install all sub-packages in one command (if this were a released package).
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Source this after building:</strong> <code>source install/setup.bash</code> makes all built packages visible to <code>ros2</code> commands in your terminal. Without sourcing, <code>ros2 run mecanumbot_core ...</code> says "package not found".</li>
+      <li><strong><code>--symlink-install</code>:</strong> <code>colcon build --symlink-install</code> makes Python nodes editable in place — changes to <code>.py</code> files take effect without rebuilding. Recommended for development.</li>
+      <li><strong>Dependencies:</strong> <code>package.xml</code> lists <code>depend</code>, <code>build_depend</code>, and <code>exec_depend</code> tags. <code>rosdep install --from-paths src</code> installs all system dependencies listed there.</li>
+      <li><strong>Executables:</strong> Python nodes are registered as entry points in <code>setup.py</code> under <code>console_scripts</code>. That's what maps <code>mecanumbot_io_node</code> (the executable name) to the Python function <code>main()</code>.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># Build all packages</span>
+<span class="cmd">colcon build --symlink-install</span>
+
+<span class="comment"># Build only one package (faster during development)</span>
+<span class="cmd">colcon build --symlink-install --packages-select mecanumbot_core</span>
+
+<span class="comment"># Source the workspace (must do in every new terminal)</span>
+<span class="cmd">source install/setup.bash</span>
+
+<span class="comment"># List executables in a package</span>
+<span class="cmd">ros2 pkg executables mecanumbot_core</span>
+<span class="output">mecanumbot_core mecanumbot_io_node
+mecanumbot_core mecanumbot_sensorproc_node</span>
+
+<span class="comment"># Install system dependencies</span>
+<span class="cmd">rosdep install --from-paths src --ignore-src -r -y</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ 11 — DDS ══════════════════ -->
+<section class="concept" id="dds">
+  <div class="concept-tag">Concept 11</div>
+  <h2>DDS &amp; Networking</h2>
+  <p class="oneliner">DDS (Data Distribution Service) is the transport layer under ROS2 — it handles node discovery, message serialization, and network communication automatically.</p>
+  <div class="why">
+    <p>In ROS1, a central <code>roscore</code> process managed the network. Everything depended on it — if it crashed, everything crashed. ROS2 replaced this with DDS, an industrial middleware standard. DDS is completely decentralised: nodes find each other via multicast UDP. When a new node starts, it announces itself and DDS discovers all peers on the same network that share the same Domain ID.</p>
+    <p style="margin-top:12px">There are multiple DDS implementations (vendors). ROS2 supports all of them, but they're not always fully interoperable. This project specifies <strong>CycloneDDS</strong> — it's known for good performance over WiFi and between machines, which is exactly what this project needs (Pi ↔ PC communication).</p>
+  </div>
+
+  <div class="diagram-wrap">
+    <h3>Pi ↔ PC over CycloneDDS</h3>
+    <svg viewBox="0 0 700 170" style="width:100%;max-width:700px" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="a6" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#39d0d8"/></marker></defs>
+      <!-- Pi box -->
+      <rect x="30" y="20" width="260" height="130" rx="8" fill="#0d1117" stroke="#3fb950"/>
+      <text x="160" y="42" class="svg-label" text-anchor="middle" style="fill:#3fb950">Raspberry Pi</text>
+      <rect x="50" y="52" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="100" y="70" class="svg-sub" text-anchor="middle">io_node</text>
+      <rect x="170" y="52" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="220" y="70" class="svg-sub" text-anchor="middle">sensorproc_node</text>
+      <rect x="50" y="100" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="100" y="118" class="svg-sub" text-anchor="middle">LD08 driver</text>
+      <rect x="170" y="100" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="220" y="118" class="svg-sub" text-anchor="middle">led_service_node</text>
+
+      <!-- Network -->
+      <rect x="310" y="65" width="80" height="40" rx="4" fill="#1c2128" stroke="#39d0d8"/>
+      <text x="350" y="80" class="svg-sub" text-anchor="middle" style="fill:#39d0d8;font-weight:700">WiFi</text>
+      <text x="350" y="93" class="svg-sub" text-anchor="middle">DOMAIN 19</text>
+
+      <!-- PC box -->
+      <rect x="410" y="20" width="260" height="130" rx="8" fill="#0d1117" stroke="#bc8cff"/>
+      <text x="540" y="42" class="svg-label" text-anchor="middle" style="fill:#bc8cff">Operator PC</text>
+      <rect x="425" y="52" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="475" y="70" class="svg-sub" text-anchor="middle">DrSpaamNode</text>
+      <rect x="545" y="52" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="595" y="70" class="svg-sub" text-anchor="middle">Nav2 + BTree</text>
+      <rect x="425" y="100" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="475" y="118" class="svg-sub" text-anchor="middle">teleop</text>
+      <rect x="545" y="100" width="100" height="28" rx="4" fill="#1c2128" stroke="#30363d"/>
+      <text x="595" y="118" class="svg-sub" text-anchor="middle">ledgui</text>
+
+      <!-- Arrows -->
+      <line x1="292" y1="85" x2="308" y2="85" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a6)" stroke-dasharray="4 2" style="animation:dash 1.4s linear infinite"/>
+      <line x1="392" y1="85" x2="408" y2="85" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#a6)" stroke-dasharray="4 2" style="animation:dash 1.4s linear infinite"/>
+    </svg>
+  </div>
+
+  <div class="callout">
+    <div class="callout-header">
+      <span class="callout-label">In Mecanumbot</span>
+      <span class="callout-file">Environment variables — set before any ros2 command</span>
+    </div>
+    <p>Two environment variables must be set consistently on <em>both</em> the Pi and the PC:</p>
+    <p><code>ROS_DOMAIN_ID=19</code> — This is like a network channel. All nodes with the same Domain ID see each other's topics and services. Nodes with a different Domain ID are completely invisible to each other. Domain 19 is arbitrary — it just needs to match on both machines. If your neighbour's robot also uses Domain 19, your topics will collide.</p>
+    <p><code>RMW_IMPLEMENTATION=rmw_cyclonedds_cpp</code> — This tells ROS2 to use CycloneDDS as the DDS vendor. Both machines must use the same DDS implementation to communicate. CycloneDDS performs better than the default FastDDS over WiFi and handles the Pi ↔ PC link more reliably.</p>
+    <p>These are usually set in <code>~/.bashrc</code> so they apply to every terminal automatically.</p>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠ Same network, same domain = same graph:</strong> Any machine on the same WiFi with <code>ROS_DOMAIN_ID=19</code> and CycloneDDS will see and interact with your robot. This means another developer on your network could accidentally send <code>/cmd_vel</code> to your robot. In a lab setting, consider using different Domain IDs per robot to isolate them.
+  </div>
+
+  <div class="facts">
+    <h3>Quick Facts</h3>
+    <ul>
+      <li><strong>Domain IDs:</strong> Range 0–101. Avoid 0 (the default — anyone with a default install would join). Pick something non-obvious like 19, 42, 77.</li>
+      <li><strong>DDS vendors:</strong> FastDDS (default), CycloneDDS, Connext, Gurum. This project requires CycloneDDS. <code>sudo apt install ros-humble-rmw-cyclonedds-cpp</code>.</li>
+      <li><strong>Multicast discovery:</strong> DDS uses UDP multicast to discover peers. Some enterprise WiFi networks block multicast, breaking cross-machine discovery. In that case, configure CycloneDDS with a unicast peer list.</li>
+      <li><strong>QoS profiles:</strong> DDS also manages message reliability, history depth, and durability. Mismatched QoS between publisher and subscriber causes silent message dropping — one of the harder bugs to diagnose.</li>
+    </ul>
+  </div>
+
+  <div class="cli-wrap">
+    <h3>Useful Terminal Commands</h3>
+    <div class="cli-block">
+      <pre><span class="comment"># Set up environment (put these in ~/.bashrc)</span>
+<span class="cmd">export ROS_DOMAIN_ID=19</span>
+<span class="cmd">export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp</span>
+
+<span class="comment"># Verify DDS implementation in use</span>
+<span class="cmd">ros2 doctor --report | grep DDS</span>
+
+<span class="comment"># Check if you can see nodes from the other machine</span>
+<span class="cmd">ros2 node list</span>
+<span class="comment"># Should show nodes from BOTH Pi and PC if connected</span>
+
+<span class="comment"># Diagnose network/DDS issues</span>
+<span class="cmd">ros2 doctor</span></pre>
+      <button class="copy-btn" onclick="copyBlock(this)">Copy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ GLOSSARY ══════════════════ -->
+<section id="glossary">
+  <div class="concept-tag">Reference</div>
+  <h2 style="font-size:28px;font-weight:800;margin-bottom:8px">Glossary</h2>
+  <p style="color:var(--text2);margin-bottom:4px;font-size:14px">Quick definitions for terms you'll encounter reading the codebase.</p>
+
+  <div class="gloss-grid">
+    <div class="gloss-card">
+      <div class="gloss-term">Node</div>
+      <div class="gloss-def">A single ROS2 process with one responsibility. Inherits from <code>rclpy.node.Node</code>. Kept alive by <code>rclpy.spin()</code>.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Topic</div>
+      <div class="gloss-def">A named, typed, asynchronous data stream. Any node can publish; any node can subscribe. No coupling between them.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Service</div>
+      <div class="gloss-def">Synchronous call-and-response. Client sends Request, server processes it and returns Response. Caller blocks until response arrives.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Action</div>
+      <div class="gloss-def">Like a service but for long-running tasks. Sends a Goal, receives periodic Feedback, gets a final Result. Cancellable at any time.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Message (.msg)</div>
+      <div class="gloss-def">A typed data structure for topic communication. Defined in a <code>.msg</code> file. Compiled into Python/C++ classes by colcon.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Parameter</div>
+      <div class="gloss-def">A named configuration value attached to a node. Declared in code with a default, overridden at launch time via YAML.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Launch file</div>
+      <div class="gloss-def">A Python script that starts multiple nodes with their parameters, namespaces, and topic remappings configured in one place.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">TF / tf2</div>
+      <div class="gloss-def">Transform library. Maintains a tree of named coordinate frames and answers "where is X in frame Y at time T?" for any two connected frames.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">DDS</div>
+      <div class="gloss-def">Data Distribution Service — the transport layer under ROS2. Handles node discovery, serialization, and networking. Replaces ROS1's roscore.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">ROS_DOMAIN_ID</div>
+      <div class="gloss-def">A number (0–101) that acts as a network channel. Only nodes with the same Domain ID see each other. Set to 19 in this project.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Namespace</div>
+      <div class="gloss-def">A prefix applied to a node's topics. <code>namespace='mecanumbot'</code> makes <code>/opencr_state</code> become <code>/mecanumbot/opencr_state</code>.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Remapping</div>
+      <div class="gloss-def">Renaming a topic/service at launch time. <code>('/cmd_vel', '/mecanumbot/cmd_vel')</code> reroutes commands without changing node code.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Spin</div>
+      <div class="gloss-def">Calling <code>rclpy.spin(node)</code> blocks the main thread and continuously processes incoming messages and timer callbacks.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">QoS</div>
+      <div class="gloss-def">Quality of Service. Controls reliability (best-effort vs reliable), durability (volatile vs transient_local), and history depth. Must match between publisher and subscriber.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">colcon</div>
+      <div class="gloss-def">The ROS2 build tool. Scans <code>src/</code>, resolves dependencies, builds packages in order, outputs to <code>install/</code>.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">ament</div>
+      <div class="gloss-def">The ROS2 build system (underlying colcon). <code>ament_python</code> for pure Python packages, <code>ament_cmake</code> for C++ or mixed packages.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">CycloneDDS</div>
+      <div class="gloss-def">The DDS vendor used in this project. Better WiFi performance and multi-machine reliability than the default FastDDS. Set via <code>RMW_IMPLEMENTATION</code>.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Nav2</div>
+      <div class="gloss-def">ROS2 Navigation2 stack. Handles AMCL localisation, costmap generation, path planning, and velocity control. Accepts goals on <code>/goal_pose</code>.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">AMCL</div>
+      <div class="gloss-def">Adaptive Monte Carlo Localisation. Nav2's particle-filter localiser. Reads <code>/scan</code> + <code>/odom</code>, publishes the <code>map→odom</code> TF transform.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">py_trees</div>
+      <div class="gloss-def">Python behaviour tree library. Nodes return SUCCESS, FAILURE, or RUNNING each tick. Used in this project for the robot guiding logic.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Blackboard</div>
+      <div class="gloss-def">py_trees shared key-value store. Behaviour nodes read/write config and state here instead of passing data directly between each other.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">frame_id</div>
+      <div class="gloss-def">The <code>header.frame_id</code> field in stamped messages tells you which coordinate frame the data is expressed in. Essential for TF lookups.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">rosdep</div>
+      <div class="gloss-def">Dependency installer. <code>rosdep install --from-paths src</code> reads <code>package.xml</code> dependencies and installs them via apt/pip.</div>
+    </div>
+    <div class="gloss-card">
+      <div class="gloss-term">Executor</div>
+      <div class="gloss-def">Runs the event loop for one or more nodes. <code>rclpy.spin()</code> uses a single-threaded executor. <code>MultiThreadedExecutor</code> processes callbacks in parallel.</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main -->
+
+<script>
+// ── ACTIVE NAV ──
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav a[href^="#"]');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+      }
+    });
+  }, {threshold: 0.2, rootMargin: '0px 0px -60% 0px'});
+  sections.forEach(s => io.observe(s));
+});
+
+// ── COPY BTN ──
+function copyBlock(btn) {
+  const pre = btn.closest('.cli-block').querySelector('pre');
+  // Strip HTML tags to get plain text
+  const tmp = document.createElement('div');
+  tmp.innerHTML = pre.innerHTML;
+  const text = tmp.textContent || tmp.innerText;
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── PAGE SEARCH ──
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  clearMarks();
+  if (!q) return;
+  walkAndMark(document.getElementById('main'), q);
+}
+
+function clearMarks() {
+  document.querySelectorAll('mark.hl').forEach(m => {
+    const t = document.createTextNode(m.textContent);
+    m.parentNode.replaceChild(t, m);
+  });
+  // Normalize text nodes
+  document.getElementById('main').normalize();
+}
+
+function walkAndMark(root, q) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  let n;
+  while (n = walker.nextNode()) nodes.push(n);
+  nodes.forEach(node => {
+    const parent = node.parentElement;
+    if (!parent || ['SCRIPT','STYLE'].includes(parent.tagName)) return;
+    const text = node.textContent;
+    const idx = text.toLowerCase().indexOf(q);
+    if (idx === -1) return;
+    const before = document.createTextNode(text.slice(0, idx));
+    const mark = document.createElement('mark');
+    mark.className = 'hl';
+    mark.textContent = text.slice(idx, idx + q.length);
+    const after = document.createTextNode(text.slice(idx + q.length));
+    const frag = document.createDocumentFragment();
+    frag.appendChild(before);
+    frag.appendChild(mark);
+    frag.appendChild(after);
+    parent.replaceChild(frag, node);
+  });
+  // Scroll to first match
+  const first = document.querySelector('mark.hl');
+  if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

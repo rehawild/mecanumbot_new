@@ -1,0 +1,26 @@
+running develop
+running egg_info
+creating mecanumbot_ledgui.egg-info
+writing mecanumbot_ledgui.egg-info/PKG-INFO
+writing dependency_links to mecanumbot_ledgui.egg-info/dependency_links.txt
+writing entry points to mecanumbot_ledgui.egg-info/entry_points.txt
+writing requirements to mecanumbot_ledgui.egg-info/requires.txt
+writing top-level names to mecanumbot_ledgui.egg-info/top_level.txt
+writing manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+reading manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+writing manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/python3.10/site-packages/mecanumbot-ledgui.egg-link (link to .)
+Installing mecanumbot_ledgui script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/mecanumbot_ledgui
+
+Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui
+running symlink_data
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/resource/mecanumbot_ledgui -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/launch
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/launch/mecanumbot_ledgui.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/launch
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/configs
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/configs/led_configs.json -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/configs

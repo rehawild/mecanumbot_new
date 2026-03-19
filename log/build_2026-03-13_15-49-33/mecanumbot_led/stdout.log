@@ -1,0 +1,22 @@
+running develop
+running egg_info
+creating mecanumbot_led.egg-info
+writing mecanumbot_led.egg-info/PKG-INFO
+writing dependency_links to mecanumbot_led.egg-info/dependency_links.txt
+writing entry points to mecanumbot_led.egg-info/entry_points.txt
+writing requirements to mecanumbot_led.egg-info/requires.txt
+writing top-level names to mecanumbot_led.egg-info/top_level.txt
+writing manifest file 'mecanumbot_led.egg-info/SOURCES.txt'
+reading manifest file 'mecanumbot_led.egg-info/SOURCES.txt'
+writing manifest file 'mecanumbot_led.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/lib/python3.10/site-packages/mecanumbot-led.egg-link (link to .)
+Installing mecanumbot_led_service script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/lib/mecanumbot_led
+
+Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_led
+running symlink_data
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/share/ament_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/share/ament_index/resource_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_led/resource/mecanumbot_led -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_led/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led/share/mecanumbot_led

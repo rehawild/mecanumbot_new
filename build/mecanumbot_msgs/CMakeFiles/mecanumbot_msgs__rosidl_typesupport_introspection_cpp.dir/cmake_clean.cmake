@@ -1,0 +1,29 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/access_motor_cmd__type_support.cpp.o"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/access_motor_cmd__type_support.cpp.o.d"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/open_cr_state__type_support.cpp.o"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/open_cr_state__type_support.cpp.o.d"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/sensor_state__type_support.cpp.o"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/sensor_state__type_support.cpp.o.d"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/get_led_status__type_support.cpp.o"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/get_led_status__type_support.cpp.o.d"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/set_led_status__type_support.cpp.o"
+  "CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/set_led_status__type_support.cpp.o.d"
+  "libmecanumbot_msgs__rosidl_typesupport_introspection_cpp.pdb"
+  "libmecanumbot_msgs__rosidl_typesupport_introspection_cpp.so"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/access_motor_cmd__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/access_motor_cmd__type_support.cpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/open_cr_state__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/open_cr_state__type_support.cpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/sensor_state__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/msg/detail/sensor_state__type_support.cpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/get_led_status__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/get_led_status__type_support.cpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/set_led_status__rosidl_typesupport_introspection_cpp.hpp"
+  "rosidl_typesupport_introspection_cpp/mecanumbot_msgs/srv/detail/set_led_status__type_support.cpp"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/mecanumbot_msgs__rosidl_typesupport_introspection_cpp.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

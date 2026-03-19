@@ -1,0 +1,3 @@
+[console_scripts]
+mecanumbot_led_service = mecanumbot_led.led_control_node:main
+

@@ -1,0 +1,23 @@
+running develop
+running egg_info
+creating mecanumbot_monitor.egg-info
+writing mecanumbot_monitor.egg-info/PKG-INFO
+writing dependency_links to mecanumbot_monitor.egg-info/dependency_links.txt
+writing entry points to mecanumbot_monitor.egg-info/entry_points.txt
+writing requirements to mecanumbot_monitor.egg-info/requires.txt
+writing top-level names to mecanumbot_monitor.egg-info/top_level.txt
+writing manifest file 'mecanumbot_monitor.egg-info/SOURCES.txt'
+reading manifest file 'mecanumbot_monitor.egg-info/SOURCES.txt'
+writing manifest file 'mecanumbot_monitor.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/lib/python3.10/site-packages/mecanumbot-monitor.egg-link (link to .)
+Installing accessory_monitor script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/lib/mecanumbot_monitor
+Installing wheel_monitor script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/lib/mecanumbot_monitor
+
+Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_monitor
+running symlink_data
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/share/ament_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/share/ament_index/resource_index
+creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_monitor/resource/mecanumbot_monitor -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/share/ament_index/resource_index/packages
+symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_monitor/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor/share/mecanumbot_monitor

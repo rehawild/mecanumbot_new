@@ -1,0 +1,233 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-38e41a47d087dacbda36.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				},
+				{
+					"build" : "mecanumbot_msgs__py",
+					"jsonFile" : "directory-mecanumbot_msgs__py-6a13c2120ee336ede2fc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_msgs/mecanumbot_msgs__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "mecanumbot_msgs",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_mecanumbot_msgs_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_mecanumbot_msgs_egg-7b0850280c343123f26d.json",
+					"name" : "ament_cmake_python_build_mecanumbot_msgs_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_symlink_mecanumbot_msgs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_symlink_mecanumbot_msgs-f490423af555efc37a54.json",
+					"name" : "ament_cmake_python_symlink_mecanumbot_msgs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs-ed07ab68de0b9d56323e.json",
+					"name" : "mecanumbot_msgs",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__cpp-9fcee912824f55a65a15.json",
+					"name" : "mecanumbot_msgs__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "mecanumbot_msgs__py::@eea51f40c7c813533c2b",
+					"jsonFile" : "target-mecanumbot_msgs__py-0b7917d6947b2c40db6e.json",
+					"name" : "mecanumbot_msgs__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_generator_c-1a60da8ba622aa30e7d8.json",
+					"name" : "mecanumbot_msgs__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_generator_py-4c5570f69c22da47af76.json",
+					"name" : "mecanumbot_msgs__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_c-247730a4c21513b8df19.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_c__pyext-142299506233accf1d6f.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_cpp-43b7f53c1d0764ec557f.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_fastrtps_c-ea8d8f470ba6bf3bfcb9.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_fastrtps_c__pyext-9c841995bafe1e4a6f92.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_fastrtps_cpp-4b5414ea47953c596199.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_introspection_c-55de0d0fbff2c6d6441b.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_introspection_c__pyext-148d723c8a765b89f9f9.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs__rosidl_typesupport_introspection_cpp-cf89149319c6ba61d797.json",
+					"name" : "mecanumbot_msgs__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "mecanumbot_msgs_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-mecanumbot_msgs_uninstall-a68d77f94967f7e900b2.json",
+					"name" : "mecanumbot_msgs_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-06263815ce05c4437e88.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_msgs",
+		"source" : "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

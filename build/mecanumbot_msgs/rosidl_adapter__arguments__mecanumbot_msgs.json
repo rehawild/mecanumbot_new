@@ -1,0 +1,10 @@
+{
+  "package_name": "mecanumbot_msgs",
+  "non_idl_tuples": [
+    "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs:msg/SensorState.msg",
+    "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs:msg/AccessMotorCmd.msg",
+    "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs:msg/OpenCRState.msg",
+    "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs:srv/GetLedStatus.srv",
+    "/home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_msgs/mecanumbot_msgs:srv/SetLedStatus.srv"
+  ]
+}

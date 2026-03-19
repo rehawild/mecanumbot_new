@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Tracer — Follow the Data Through Mecanumbot</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #0d1117;
+  --bg3: #161b22;
+  --bg4: #1c2128;
+  --border: #30363d;
+  --cyan: #39d0d8;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --orange: #f0883e;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --text3: #6e7681;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+/* ── HERO ── */
+#hero{
+  text-align:center;padding:60px 24px 40px;
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
+  border-bottom:1px solid var(--border);position:relative;overflow:hidden;
+}
+#hero::before{
+  content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(57,208,216,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-tag{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px}
+#hero h1{font-size:36px;font-weight:800;margin-bottom:10px;line-height:1.1}
+#hero h1 span{color:var(--cyan)}
+#hero p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto 32px}
+
+/* ── SCENARIO CARDS ── */
+#scenario-picker{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:0 16px}
+.s-card{
+  background:var(--bg3);border:2px solid var(--border);border-radius:10px;
+  padding:16px 22px;cursor:pointer;transition:all .18s;text-align:left;
+  max-width:240px;flex:1;min-width:190px;
+}
+.s-card:hover{border-color:var(--text3);transform:translateY(-2px)}
+.s-card.active{border-color:var(--cyan);background:rgba(57,208,216,.06)}
+.s-card .s-icon{font-size:22px;margin-bottom:8px}
+.s-card .s-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.s-card .s-desc{font-size:12px;color:var(--text2)}
+.s-card .s-steps{font-size:11px;color:var(--text3);margin-top:8px}
+.s-card.active .s-steps{color:var(--cyan)}
+
+/* ── MAIN STAGE ── */
+#stage{max-width:800px;margin:0 auto;padding:32px 24px 80px}
+
+/* ── PROGRESS BAR ── */
+#progress-wrap{
+  display:flex;align-items:center;gap:12px;margin-bottom:28px;
+}
+#progress-track{
+  flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;
+}
+#progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));
+  border-radius:2px;transition:width .35s ease;
+}
+#step-counter{font-size:12px;color:var(--text3);white-space:nowrap;font-weight:600}
+
+/* ── STEP CARD ── */
+#step-display{min-height:360px;position:relative}
+.step-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  padding:28px 32px;position:absolute;width:100%;top:0;
+  transition:opacity .25s ease,transform .25s ease;
+}
+.step-card.hidden{opacity:0;pointer-events:none;transform:translateX(40px)}
+.step-card.exit-left{opacity:0;pointer-events:none;transform:translateX(-40px)}
+
+.step-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(57,208,216,.12);border:1px solid rgba(57,208,216,.3);
+  color:var(--cyan);font-size:11px;font-weight:700;padding:3px 10px;
+  border-radius:20px;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.step-card h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.step-card .step-explain{
+  font-size:14px;color:var(--text2);margin-bottom:18px;
+  max-width:640px;line-height:1.65;
+}
+
+/* why-matters callout */
+.why-matters{
+  background:rgba(63,185,80,.07);border-left:3px solid var(--green);
+  border-radius:0 8px 8px 0;padding:10px 16px;margin-bottom:18px;
+  font-size:13px;color:var(--text);
+}
+.why-matters strong{color:var(--green)}
+
+/* ── CODE BLOCK ── */
+.code-wrap{position:relative}
+.code-label{
+  font-size:11px;color:var(--text3);font-family:monospace;
+  margin-bottom:6px;display:flex;align-items:center;gap:8px;
+}
+.code-label span{
+  background:var(--bg4);padding:2px 8px;border-radius:4px;
+  color:var(--orange);font-size:11px;
+}
+pre.code{
+  background:var(--bg4);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;font-size:12.5px;font-family:'Consolas','Cascadia Code','Fira Code',monospace;
+  line-height:1.65;overflow-x:auto;color:var(--text);
+}
+.copy-btn{
+  position:absolute;top:28px;right:0;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);padding:3px 10px;border-radius:5px;font-size:11px;cursor:pointer;
+  transition:all .15s;
+}
+.copy-btn:hover{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.copy-btn.copied{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* syntax colours */
+.kw{color:#ff7b72}   /* keyword */
+.fn{color:#d2a8ff}   /* function */
+.st{color:#a5d6ff}   /* string */
+.cm{color:#6e7681;font-style:italic}  /* comment */
+.tp{color:#39d0d8}   /* topic / ROS name */
+.nm{color:#f0883e}   /* number / constant */
+.cl{color:#ffa657}   /* class */
+
+/* ── NAV BUTTONS ── */
+#nav-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:22px;gap:12px;
+}
+.nav-btn{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);padding:9px 18px;border-radius:8px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;
+}
+.nav-btn:hover{background:var(--bg4);color:var(--text);border-color:var(--text3)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.primary{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.nav-btn.primary:hover{background:#52dde4}
+.kbd{
+  display:inline-block;background:var(--bg4);border:1px solid var(--border);
+  color:var(--text3);padding:1px 7px;border-radius:4px;font-size:10px;font-family:monospace;
+}
+#key-hint{font-size:11px;color:var(--text3);text-align:center}
+
+/* ── STEP DOTS ── */
+#step-dots{display:flex;gap:6px;justify-content:center;margin-bottom:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s;cursor:pointer}
+.dot.active{background:var(--cyan);transform:scale(1.3)}
+.dot.done{background:var(--green)}
+
+/* ── FINISH CARD ── */
+#finish-card{
+  display:none;text-align:center;
+  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  padding:40px 32px;
+}
+#finish-card h2{font-size:22px;font-weight:800;color:var(--green);margin-bottom:8px}
+#finish-card p{color:var(--text2);font-size:14px;margin-bottom:24px}
+.restart-btn{
+  background:var(--cyan);color:var(--bg);border:none;
+  padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .15s;
+}
+.restart-btn:hover{background:#52dde4}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── PLACEHOLDER (no scenario selected) ── */
+#placeholder{
+  text-align:center;padding:60px 20px;color:var(--text3);font-size:14px;
+}
+#placeholder .big{font-size:40px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div id="hero">
+  <div class="hero-tag">Mecanumbot · Learning Tool</div>
+  <h1>Follow the <span>Signal</span></h1>
+  <p>Pick a real scenario. Watch the data travel through the code, one step at a time.</p>
+
+  <div id="scenario-picker">
+    <div class="s-card" onclick="selectScenario(0)">
+      <div class="s-icon">🕹️</div>
+      <div class="s-title">I push the joystick forward</div>
+      <div class="s-desc">From your thumb on the stick to the wheels spinning</div>
+      <div class="s-steps">6 steps</div>
+    </div>
+    <div class="s-card" onclick="selectScenario(1)">
+      <div class="s-icon">👁️</div>
+      <div class="s-title">Robot detects a person</div>
+      <div class="s-desc">From a laser beam to "person found at x, y"</div>
+      <div class="s-steps">5 steps</div>
+    </div>
+    <div class="s-card" onclick="selectScenario(2)">
+      <div class="s-icon">🐕</div>
+      <div class="s-title">Behaviour tree guides the robot</div>
+      <div class="s-desc">From "is the subject following?" to wheels turning</div>
+      <div class="s-steps">5 steps</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── STAGE ── -->
+<div id="stage">
+  <div id="placeholder">
+    <div class="big">☝️</div>
+    Pick a scenario above to start tracing
+  </div>
+
+  <div id="tracer" style="display:none">
+    <div id="step-dots"></div>
+    <div id="progress-wrap">
+      <div id="progress-track"><div id="progress-fill" style="width:0%"></div></div>
+      <div id="step-counter">Step 1 / 6</div>
+    </div>
+
+    <div id="step-display">
+      <!-- cards injected by JS -->
+    </div>
+
+    <div id="finish-card">
+      <h2>Signal traced ✓</h2>
+      <p id="finish-msg">You followed the full journey.</p>
+      <button class="restart-btn" onclick="restart()">← Pick another scenario</button>
+    </div>
+
+    <div id="nav-row">
+      <button class="nav-btn" id="btn-prev" onclick="move(-1)" disabled>← Prev</button>
+      <div id="key-hint"><span class="kbd">←</span> <span class="kbd">→</span> arrow keys</div>
+      <button class="nav-btn primary" id="btn-next" onclick="move(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  SCENARIO DATA
+// ══════════════════════════════════════════════
+const SCENARIOS = [
+
+// ── SCENARIO 0: Joystick → Motors ──────────────────────────────────────────
+{
+  title: "I push the joystick forward",
+  finish: "You just traced a joystick push all the way to spinning wheels — across two nodes, a serial port, and a microcontroller.",
+  steps: [
+    {
+      badge: "Step 1 · Your PC",
+      title: "joy_node reads the USB gamepad",
+      explain: "Before your code even runs, a built-in ROS2 driver called <code>joy_node</code> polls the USB gamepad at ~50 Hz and publishes the raw axis/button values as a <code>sensor_msgs/Joy</code> message on <code>/joy</code>. Think of it as a translator from USB HID to ROS2.",
+      why: "<strong>Why it matters:</strong> Your teleop code never talks to USB hardware directly. It just subscribes to <code>/joy</code>. This means you could swap in a different gamepad model without touching the teleop logic.",
+      file: "ros2 run joy joy_node  (standard ROS2 package, no custom code)",
+      code: `<span class="cm"># /joy message structure (sensor_msgs/Joy)</span>
+header:
+  stamp: ...
+axes:  [<span class="nm">0.0</span>, <span class="nm">0.0</span>, <span class="nm">0.85</span>, ...]   <span class="cm"># float32[]  -1.0 to 1.0</span>
+buttons: [<span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">1</span>, ...]             <span class="cm"># int32[]    0 or 1</span>
+
+<span class="cm"># Check it live:</span>
+ros2 topic echo /joy`
+    },
+    {
+      badge: "Step 2 · Your PC",
+      title: "Teleop converts axes → Twist velocity",
+      explain: "The <code>MecanumbotJoyTeleop</code> node subscribes to <code>/joy</code>. Its <code>joy_callback()</code> reads the relevant axes, applies a deadzone (ignores tiny accidental movements), multiplies by max speed, and builds a <code>geometry_msgs/Twist</code> message. For 'joystick pushed fully forward': <code>linear.x = 1.0 × 0.234 m/s = 0.234</code>.",
+      why: "<strong>Why it matters:</strong> This is where human intent (joystick position) becomes a robot velocity command. The Twist message is the universal ROS2 language for 'move like this' — Nav2 uses the same format.",
+      file: "src/mecanumbot_remote/mecanumbot_teleop/mecanumbot_teleop/script/teleop_joystick.py · lines 151–221",
+      code: `<span class="kw">def</span> <span class="fn">joy_callback</span>(<span class="kw">self</span>, joy_msg):
+    x_in = joy_msg.axes[<span class="kw">self</span>.ax_lin_x_idx]   <span class="cm"># e.g. 1.0 (full forward)</span>
+
+    <span class="kw">if</span> abs(x_in) < <span class="kw">self</span>.deadzone:          <span class="cm"># ignore tiny noise</span>
+        x_in = <span class="nm">0.0</span>
+
+    <span class="kw">self</span>.target_vel[<span class="nm">0</span>] = x_in * <span class="kw">self</span>.max_lin  <span class="cm"># 1.0 × 0.234 = 0.234 m/s</span>
+
+    twist = Twist()
+    twist.linear.x = <span class="fn">float</span>(<span class="kw">self</span>.control_vel[<span class="nm">0</span>])
+    twist.angular.z = <span class="fn">float</span>(<span class="kw">self</span>.control_vel[<span class="nm">2</span>])
+    <span class="kw">self</span>.pub_vel.<span class="fn">publish</span>(twist)             <span class="cm"># → /cmd_vel</span>`
+    },
+    {
+      badge: "Step 3 · Raspberry Pi",
+      title: "io_node receives /cmd_vel",
+      explain: "On the Pi, <code>mecanumbot_io_node</code> has subscribed to <code>/cmd_vel</code>. The moment the Twist message arrives (over WiFi via DDS), <code>vel_cmd_callback()</code> fires. First thing it does: pull GPIO 27 HIGH — this enables the RS-485 chip's transmit direction so the serial line can send data toward the OpenCR.",
+      why: "<strong>Why it matters:</strong> The OpenCR is connected via RS-485, a half-duplex bus. You physically can't transmit and receive at the same time — the GPIO pin switches direction. Forgetting this would mean garbled packets.",
+      file: "src/mecanumbot/mecanumbot_core/mecanumbot_core/mecanumbot_IO_node.py · line 225",
+      code: `<span class="kw">def</span> <span class="fn">vel_cmd_callback</span>(<span class="kw">self</span>, msg):
+    wiringpi.<span class="fn">digitalWrite</span>(<span class="kw">self</span>.GPIO_pin, <span class="nm">1</span>)  <span class="cm"># GPIO 27 HIGH → RS-485 TX mode</span>
+
+    Vx = msg.linear.x    <span class="cm"># 0.234 m/s (forward)</span>
+    Vy = msg.linear.y    <span class="cm"># 0.0 m/s  (no strafe)</span>
+    Wz = msg.angular.z   <span class="cm"># 0.0 rad/s (no rotation)</span>
+
+    <span class="cm"># next: convert Vx,Vy,Wz → 4 wheel tick speeds</span>`
+    },
+    {
+      badge: "Step 4 · Raspberry Pi",
+      title: "Mecanum inverse kinematics → 4 wheel ticks",
+      explain: "A mecanum wheel robot can move in any direction because each wheel's roller is angled at 45°. The 'inverse kinematics' formula decomposes Vx/Vy/Wz into four independent wheel speeds. Each result is a raw integer tick value, clamped to ±300 (the OpenCR's safe limit). Pushing straight forward: all four wheels get the same positive value.",
+      why: "<strong>Why it matters:</strong> This math is the mechanical core of the whole robot. Get it wrong and the robot spins instead of driving straight. The signs in the formula encode the 45° roller geometry.",
+      file: "src/mecanumbot/mecanumbot_core/mecanumbot_core/mecanumbot_IO_node.py · lines 229–242",
+      code: `<span class="cm"># scale = (vel_tick/60) × 2π × wheel_radius  (ticks → m/s conversion)</span>
+<span class="cm"># wheel_dist_scale = (sep_x + sep_y) / 2     (moment arm for rotation)</span>
+
+bl_raw = (Vx + Vy - Wz * <span class="kw">self</span>.wheel_dist_scale) / <span class="kw">self</span>.scale
+br_raw = (Vx - Vy + Wz * <span class="kw">self</span>.wheel_dist_scale) / <span class="kw">self</span>.scale
+fl_raw = (Vx - Vy - Wz * <span class="kw">self</span>.wheel_dist_scale) / <span class="kw">self</span>.scale
+fr_raw = (Vx + Vy + Wz * <span class="kw">self</span>.wheel_dist_scale) / <span class="kw">self</span>.scale
+
+<span class="cm"># Clamp to ±300 ticks (max safe motor command)</span>
+self.cmd_outputs[<span class="st">'BL_vel'</span>] = <span class="fn">max</span>(<span class="fn">min</span>(bl_raw, <span class="nm">300</span>), <span class="nm">-300</span>)
+self.cmd_outputs[<span class="st">'BR_vel'</span>] = <span class="fn">max</span>(<span class="fn">min</span>(br_raw, <span class="nm">300</span>), <span class="nm">-300</span>)
+self.cmd_outputs[<span class="st">'FL_vel'</span>] = <span class="fn">max</span>(<span class="fn">min</span>(fl_raw, <span class="nm">300</span>), <span class="nm">-300</span>)
+self.cmd_outputs[<span class="st">'FR_vel'</span>] = <span class="fn">max</span>(<span class="fn">min</span>(fr_raw, <span class="nm">300</span>), <span class="nm">-300</span>)`
+    },
+    {
+      badge: "Step 5 · Raspberry Pi",
+      title: "Serial packet assembled & sent to OpenCR",
+      explain: "The four tick values (plus neck and gripper positions) are packed into a 14-byte binary packet using Python's <code>struct.pack</code>. The format <code>'&lt;7h'</code> means: little-endian, 7 × signed 16-bit integers. This packet is written to <code>/dev/ttyACM0</code> at 57600 baud. Then the code sleeps 100 ms (the RS-485 direction hold time) and pulls GPIO 27 LOW again to return to receive mode.",
+      why: "<strong>Why it matters:</strong> The 100 ms sleep caps motor commands at ~10 Hz regardless of how fast <code>/cmd_vel</code> arrives. This is the bottleneck in the whole teleop chain.",
+      file: "src/mecanumbot/mecanumbot_core/mecanumbot_core/mecanumbot_IO_node.py · lines 254–271",
+      code: `<span class="kw">def</span> <span class="fn">update_motor_cmds_out</span>(<span class="kw">self</span>):
+    fmt = <span class="st">'&lt;7h'</span>   <span class="cm"># little-endian, 7 × int16  = 14 bytes</span>
+    message_bytes = struct.<span class="fn">pack</span>(fmt,
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'BL_vel'</span>]),  <span class="cm"># back-left wheel</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'BR_vel'</span>]),  <span class="cm"># back-right wheel</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'FL_vel'</span>]),  <span class="cm"># front-left wheel</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'FR_vel'</span>]),  <span class="cm"># front-right wheel</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'N_pos'</span>]),   <span class="cm"># neck servo</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'GL_pos'</span>]),  <span class="cm"># left gripper</span>
+        <span class="fn">int</span>(<span class="kw">self</span>.cmd_outputs[<span class="st">'GR_pos'</span>]))  <span class="cm"># right gripper</span>
+
+    <span class="kw">self</span>.ser.<span class="fn">write</span>(message_bytes)    <span class="cm"># → /dev/ttyACM0 @ 57600 baud</span>
+    time.<span class="fn">sleep</span>(<span class="nm">0.1</span>)                  <span class="cm"># hold RS-485 TX line (100 ms)</span>
+    wiringpi.<span class="fn">digitalWrite</span>(<span class="kw">self</span>.GPIO_pin, <span class="nm">0</span>)  <span class="cm"># GPIO 27 LOW → back to RX</span>`
+    },
+    {
+      badge: "Step 6 · OpenCR Hardware",
+      title: "OpenCR drives the motors & sends telemetry back",
+      explain: "The OpenCR firmware receives the 14-byte packet, extracts the 4 wheel velocities, and writes them to the DYNAMIXEL motor controllers. The wheels spin. Simultaneously, the firmware runs its own 100 Hz loop: it reads all motor encoders, currents, and the IMU, packs everything into a 74-byte reply (magic bytes 0x55AA + CRC8), and sends it back. On the Pi, a background daemon thread in <code>io_node</code> reads this stream continuously and stores the latest values. The 100 Hz timer then publishes <code>/mecanumbot/opencr_state</code>.",
+      why: "<strong>Why it matters:</strong> Every odometry estimate, every IMU reading, every battery percentage the rest of the system sees — it all originates here in this serial reply stream. If this thread stops receiving valid packets, the robot goes blind.",
+      file: "src/mecanumbot/mecanumbot_core/mecanumbot_core/mecanumbot_IO_node.py · read_thread_fn() + timer_callback()",
+      code: `<span class="cm"># Background thread: continuously reads from /dev/ttyACM0</span>
+<span class="kw">def</span> <span class="fn">read_thread_fn</span>(<span class="kw">self</span>):
+    <span class="kw">while</span> rclpy.<span class="fn">ok</span>():
+        <span class="cm"># 1. search rolling buffer for magic bytes 0x55 0xAA</span>
+        <span class="cm"># 2. wait for full 74-byte packet</span>
+        <span class="cm"># 3. validate CRC8-CCITT (polynomial 0x07)</span>
+        <span class="cm"># 4. unpack with struct.unpack('&lt;23h14f', payload)</span>
+        <span class="kw">with</span> <span class="kw">self</span>.rx_lock:
+            <span class="kw">self</span>.vals = unpacked_values  <span class="cm"># stored for timer to read</span>
+
+<span class="cm"># Timer (100 Hz): publish the latest stored values</span>
+<span class="kw">def</span> <span class="fn">timer_callback</span>(<span class="kw">self</span>):
+    <span class="kw">self</span>.<span class="fn">update_opencr_state_in</span>()          <span class="cm"># copy vals → OpenCRState msg</span>
+    <span class="kw">self</span>.opencr_publisher_.<span class="fn">publish</span>(<span class="kw">self</span>.opencr_state)  <span class="cm"># → /mecanumbot/opencr_state</span>`
+    }
+  ]
+},
+
+// ── SCENARIO 1: LiDAR → Person detected ────────────────────────────────────
+{
+  title: "Robot detects a person",
+  finish: "You followed a laser pulse from the LiDAR all the way to a map-frame person position that the behaviour tree can act on.",
+  steps: [
+    {
+      badge: "Step 1 · Raspberry Pi",
+      title: "LD08 LiDAR publishes a scan",
+      explain: "The LD08 is a 360° spinning laser rangefinder connected to the Pi via USB at <code>/dev/ttyUSB0</code>. A standard ROS2 driver reads the serial data and publishes a <code>sensor_msgs/LaserScan</code> message about 10 times per second. Each message is a snapshot of distances in every direction around the robot.",
+      why: "<strong>Why it matters:</strong> LaserScan is a standard ROS2 format — the same message type works for Nav2 (obstacle avoidance) and DR-SPAAM (person detection) without any conversion. Both subscribe to the same topic simultaneously.",
+      file: "ros2 launch mecanumbot_bringup launch_mecanumbot_base.launch.py  (LD08 driver node)",
+      code: `<span class="cm"># /mecanumbot/scan  (sensor_msgs/LaserScan)</span>
+header:
+  frame_id: <span class="st">"mecanumbot/laser_link"</span>   <span class="cm"># where on the robot the LiDAR is</span>
+angle_min:  <span class="nm">-3.14159</span>    <span class="cm"># -180°</span>
+angle_max:   <span class="nm">3.14159</span>    <span class="cm"># +180°</span>
+angle_increment: <span class="nm">0.01745</span>  <span class="cm"># ~1° per reading</span>
+ranges: [<span class="nm">1.2</span>, <span class="nm">0.9</span>, <span class="nm">inf</span>, ...]  <span class="cm"># distance in metres per beam</span>
+
+<span class="cm"># Check it live:</span>
+ros2 topic hz /mecanumbot/scan`
+    },
+    {
+      badge: "Step 2 · Your PC",
+      title: "DR-SPAAM preprocesses the scan",
+      explain: "The person-detection node on the PC receives each LaserScan. First, it repairs broken readings: any <code>inf</code> or <code>NaN</code> value (beam missed, too close, too far) gets replaced by the average of its neighbours — <code>fill_with_neighbor_average()</code>. Then it resamples the whole scan to exactly 240 points — the fixed input size the DR-SPAAM neural network was trained on.",
+      why: "<strong>Why it matters:</strong> Neural networks expect a fixed-size input. The LD08 may produce a different number of points depending on rotation speed. Resampling ensures the model always gets exactly what it was trained on.",
+      file: "src/mecanumbot_remote/mecanumbot_sensorprocess_smart/mecanumbot_sensorprocess_smart/mecanumbot_lidar_detect_people.py · lines 88–107",
+      code: `<span class="kw">def</span> <span class="fn">scan_callback</span>(<span class="kw">self</span>, msg, expected_points=<span class="nm">240</span>):
+    scan = <span class="fn">np.array</span>(msg.ranges, dtype=np.float32)
+
+    <span class="cm"># Replace inf/NaN with average of neighbours</span>
+    scan = <span class="fn">fill_with_neighbor_average</span>(scan)
+
+    <span class="cm"># Resample to exactly 240 points (model's required input size)</span>
+    scan = <span class="fn">interpolate_scan</span>(scan, expected_points)
+
+    <span class="cm"># scan is now a clean float32 array of shape (240,)</span>
+    <span class="cm"># ready for the neural network</span>`
+    },
+    {
+      badge: "Step 3 · Your PC · GPU/CPU",
+      title: "PyTorch inference finds people",
+      explain: "The cleaned 240-point array is fed into the DR-SPAAM PyTorch model (loaded from <code>dr_spaam_5_on_frog.pth</code>). The model was trained on thousands of labelled LiDAR scans of people. It outputs two arrays: <code>dets_xy</code> (x/y position of each detection in sensor frame) and <code>dets_cls</code> (a confidence score 0.0–1.0 for each).",
+      why: "<strong>Why it matters:</strong> This is the only machine learning in the whole system. Everything else is classical control and geometry. The robot's ability to find a person depends entirely on this one model file.",
+      file: "src/mecanumbot_remote/mecanumbot_sensorprocess_smart/mecanumbot_sensorprocess_smart/mecanumbot_lidar_detect_people.py · line 109",
+      code: `<span class="cm"># self.detector was initialised with the .pth checkpoint file</span>
+dets_xy, dets_cls, _ = <span class="kw">self</span>.<span class="fn">detector</span>(scan)
+
+<span class="cm"># dets_xy  shape: (N, 2)  — x/y in sensor frame, metres</span>
+<span class="cm"># dets_cls shape: (N,)    — confidence scores 0.0 to 1.0</span>
+
+<span class="cm"># Example result for 2 detections:</span>
+<span class="cm"># dets_xy  = [[0.5, 1.2], [-0.3, 2.1]]</span>
+<span class="cm"># dets_cls = [0.94, 0.61]   (first is high confidence)</span>`
+    },
+    {
+      badge: "Step 4 · Your PC",
+      title: "Confidence filter + coordinate transform",
+      explain: "Only detections with confidence ≥ 0.85 pass the filter. Then each surviving (x, y) position needs to be converted from the LiDAR's local sensor frame (relative to where the LiDAR is on the robot) into the global map frame — so the behaviour tree can navigate there. This conversion uses TF: a lookup of the full chain <code>laser_link → base_footprint → odom → map</code>.",
+      why: "<strong>Why it matters:</strong> Without the TF transform, 'person at (0.5, 1.2)' just means '0.5 m ahead of the LiDAR' — useless for navigation. After transformation it becomes 'person at map coordinates (3.1, -2.4)' — which Nav2 can route to.",
+      file: "src/mecanumbot_remote/mecanumbot_sensorprocess_smart/mecanumbot_sensorprocess_smart/mecanumbot_lidar_detect_people.py · lines 111–118",
+      code: `<span class="cm"># Keep only detections with confidence ≥ 0.85</span>
+conf_mask = (dets_cls >= <span class="kw">self</span>.conf_thresh).<span class="fn">reshape</span>(-<span class="nm">1</span>)
+dets_xy  = dets_xy[conf_mask]
+
+<span class="cm"># Note: axes are swapped + negated to match ROS convention (x=forward)</span>
+dets_xy = -<span class="nm">1</span> * dets_xy
+
+<span class="cm"># Build PoseArray in map frame using TF lookup</span>
+<span class="cm"># tf_buffer.lookup_transform('map', 'laser_link', time) → 4×4 matrix</span>
+<span class="cm"># transforms each (x,y) from laser frame → map frame</span>`
+    },
+    {
+      badge: "Step 5 · Your PC",
+      title: "Subject pose published for the behaviour tree",
+      explain: "The first surviving detection (<code>poses[0]</code>) becomes <code>/mecanumbot/subject_pose</code> — the person the robot is supposed to guide. This topic is subscribed to by the behaviour tree's <code>DistanceToBlackboard</code> and <code>DogCheckFollowing</code> behaviours. The full array of all detections goes to <code>/mecanumbot/dets</code> for visualisation in RViz.",
+      why: "<strong>Why it matters:</strong> There is no person tracking — it's always just <code>poses[0]</code>. In a crowd, the 'subject' can jump between different people between frames. This is a known limitation of the current system.",
+      file: "src/mecanumbot_remote/mecanumbot_sensorprocess_smart/mecanumbot_sensorprocess_smart/mecanumbot_lidar_detect_people.py · lines 122–126",
+      code: `<span class="cm"># dets_msg is a PoseArray with all filtered detections</span>
+<span class="kw">if</span> <span class="kw">self</span>.leading_mode <span class="kw">and</span> <span class="fn">len</span>(dets_msg.poses) > <span class="nm">0</span>:
+    <span class="kw">self</span>.pose_out = <span class="kw">self</span>.<span class="fn">_parse_subject_pose</span>(dets_msg)
+    <span class="cm"># _parse_subject_pose returns poses[0] as a PoseStamped</span>
+
+<span class="kw">self</span>.subject_pub.<span class="fn">publish</span>(<span class="kw">self</span>.pose_out)   <span class="cm"># → /mecanumbot/subject_pose</span>
+<span class="kw">self</span>.dets_pub.<span class="fn">publish</span>(dets_msg)           <span class="cm"># → /mecanumbot/dets  (all detections)</span>
+
+<span class="cm"># Behaviour tree reads /mecanumbot/subject_pose on every tick</span>`
+    }
+  ]
+},
+
+// ── SCENARIO 2: Behaviour tree guides the robot ─────────────────────────────
+{
+  title: "Behaviour tree guides the robot",
+  finish: "You traced one full cycle of the dog-like guiding behaviour — from checking if the subject is following, to picking a waypoint, to Nav2 turning that into wheel commands.",
+  steps: [
+    {
+      badge: "Step 1 · Your PC · 10 Hz",
+      title: "Tree ticks: is the subject still following?",
+      explain: "The dog behaviour tree ticks at 10 Hz — every 100 ms it re-evaluates the whole tree from the top. The first key check is <code>DogCheckFollowing</code>: it compares the subject's current distance from the target to their distance on the previous tick. If the distance <em>increased</em> too much, they've stopped following.",
+      why: "<strong>Why it matters:</strong> The tree is reactive, not a one-shot script. Every 100 ms it rechecks conditions. If the subject gets lost, the tree immediately knows and can respond — without any explicit event system.",
+      file: "src/mecanumbot_behaviours/mecanumbot_leading_behaviour/behaviours/dog_behaviours.py · lines 138–161",
+      code: `<span class="kw">def</span> <span class="fn">update</span>(<span class="kw">self</span>):
+    distance      = <span class="kw">self</span>.current_distance   <span class="cm"># subject→target now</span>
+    last_distance = <span class="kw">self</span>.blackboard.last_distance  <span class="cm"># last tick</span>
+    distance_diff = distance - last_distance  <span class="cm"># positive = moving away</span>
+
+    <span class="kw">if</span> distance_diff >= <span class="nm">0</span>:
+        <span class="kw">self</span>.wanders += <span class="nm">1</span>  <span class="cm"># count how many times they moved away</span>
+
+    <span class="kw">if</span> <span class="kw">self</span>.wanders > <span class="kw">self</span>.blackboard.Dog_max_wander_allowed:
+        <span class="kw">return</span> py_trees.common.Status.FAILURE   <span class="cm"># lost too many times</span>
+    <span class="kw">elif</span> distance_diff > <span class="kw">self</span>.blackboard.Dog_following_max_threshold:
+        <span class="kw">return</span> py_trees.common.Status.FAILURE   <span class="cm"># moved too far in one tick</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> py_trees.common.Status.SUCCESS   <span class="cm"># still following ✓</span>`
+    },
+    {
+      badge: "Step 2 · Your PC",
+      title: "DogSelectTarget picks the next waypoint",
+      explain: "With the subject confirmed as following, the tree picks where to go next. <code>DogSelectTarget</code> scans all pre-configured checkpoints (from <code>behaviour_setting_constants.yaml</code>), finds which one is closest to the robot's current position — then adds 1 to that index. The robot always drives to the checkpoint <em>after</em> the nearest one to ensure forward progress.",
+      why: "<strong>Why it matters:</strong> The +1 index trick means the robot won't get stuck oscillating around the nearest checkpoint. It always moves toward the next one in the sequence, even if it's further away.",
+      file: "src/mecanumbot_behaviours/mecanumbot_leading_behaviour/behaviours/dog_behaviours.py",
+      code: `<span class="cm"># DogSelectTarget.update() — simplified</span>
+checkpoints = <span class="kw">self</span>.blackboard.Dog_checkpoints   <span class="cm"># list of [x, y, z] from YAML</span>
+robot_pos = <span class="kw">self</span>.blackboard.robot_pose.position
+
+<span class="cm"># Find the checkpoint closest to the robot</span>
+distances = [<span class="fn">dist</span>(robot_pos, cp) <span class="kw">for</span> cp <span class="kw">in</span> checkpoints]
+closest_index = <span class="fn">np.argmin</span>(distances)
+
+<span class="cm"># Always target the NEXT checkpoint, not the closest</span>
+target_index = closest_index + <span class="nm">1</span>
+<span class="kw">self</span>.blackboard.current_target = checkpoints[target_index]`
+    },
+    {
+      badge: "Step 3 · Your PC",
+      title: "Approach sends a goal to Nav2",
+      explain: "The <code>Approach</code> behaviour builds a <code>geometry_msgs/PoseStamped</code> pointing toward the chosen checkpoint, some distance back (the <code>robot_closeness_threshold</code> gap), and publishes it to <code>/goal_pose</code>. Nav2 is subscribed to <code>/goal_pose</code> — the moment it arrives, Nav2 starts planning a path.",
+      why: "<strong>Why it matters:</strong> The behaviour tree never computes a path. It only sends a destination. Nav2 handles all the obstacle avoidance, costmap checks, and path smoothing internally. Clean separation of concerns.",
+      file: "src/mecanumbot_behaviours/mecanumbot_leading_behaviour/behaviours/movement_managers.py · lines 363–382",
+      code: `<span class="kw">def</span> <span class="fn">send_goal_command</span>(<span class="kw">self</span>):
+    desired_pose = <span class="fn">pose_to_goal</span>(
+        self.compare_position,   <span class="cm"># the chosen checkpoint</span>
+        self.robot_pose,         <span class="cm"># current robot position (from AMCL)</span>
+        stop_threshold=<span class="kw">self</span>.blackboard.robot_closeness_threshold)
+
+    goal_cmd = PoseStamped()
+    goal_cmd.header.frame_id = <span class="st">"map"</span>   <span class="cm"># IMPORTANT: map frame, not robot frame</span>
+    goal_cmd.pose = desired_pose
+
+    <span class="kw">self</span>.publisher.<span class="fn">publish</span>(goal_cmd)    <span class="cm"># → /goal_pose  (Nav2 picks this up)</span>
+    <span class="kw">self</span>.goal_sent = <span class="kw">True</span>`
+    },
+    {
+      badge: "Step 4 · Your PC · Nav2",
+      title: "Nav2 plans the path & drives the wheels",
+      explain: "Nav2 receives the goal on <code>/goal_pose</code>. It uses AMCL's map-frame robot position, the pre-built occupancy map, and the LiDAR-based costmap to compute a collision-free path. It then runs a trajectory controller that publishes <code>/cmd_vel</code> Twist messages — the same topic that teleop uses. <code>io_node</code> on the Pi receives these and converts them to wheel ticks via mecanum IK (same as Scenario 1, steps 3–5).",
+      why: "<strong>Why it matters:</strong> Nav2 is a complete black box from the behaviour tree's perspective. The tree says 'go here', Nav2 figures out how. If Nav2 can't find a path (blocked), it aborts — and the behaviour tree sees status ABORTED and can retry.",
+      file: "Nav2 internal — communicates via /cmd_vel and /navigate_to_pose action",
+      code: `<span class="cm"># What Nav2 does internally (simplified):</span>
+<span class="cm"># 1. AMCL gives current pose in map frame  (/amcl_pose)</span>
+<span class="cm"># 2. Global planner computes A* path on occupancy map</span>
+<span class="cm"># 3. Local planner avoids dynamic obstacles (LiDAR costmap)</span>
+<span class="cm"># 4. Controller outputs /cmd_vel at 20 Hz</span>
+
+<span class="cm"># The wheels turn via the same chain as Scenario 1:</span>
+<span class="cm"># /cmd_vel → io_node → mecanum IK → serial → OpenCR → motors</span>
+
+<span class="cm"># Monitor Nav2 progress:</span>
+ros2 topic echo /navigate_to_pose/_action/status`
+    },
+    {
+      badge: "Step 5 · Your PC",
+      title: "Tree monitors until goal succeeds",
+      explain: "While Nav2 is running, every 100 ms tick the <code>Approach</code> behaviour checks the action status. ROS2 actions publish a <code>GoalStatusArray</code> on a standard topic. Status 2 = EXECUTING (keep waiting), status 4 = SUCCEEDED (return SUCCESS to tree), status 5/6 = cancelled/aborted (return RUNNING to retry). Once SUCCESS, the tree moves to the next behaviour in the sequence.",
+      why: "<strong>Why it matters:</strong> The behaviour tree never blocks. While Nav2 is navigating, the tree returns RUNNING each tick, which means it can be pre-empted by a higher-priority branch (e.g. if the subject gets lost). This is the power of behaviour trees over simple state machines.",
+      file: "src/mecanumbot_behaviours/mecanumbot_leading_behaviour/behaviours/movement_managers.py · lines 120–135",
+      code: `<span class="cm"># Called every 100ms tick while Nav2 is navigating</span>
+<span class="kw">def</span> <span class="fn">update</span>(<span class="kw">self</span>):
+    <span class="kw">if</span> <span class="kw">self</span>.goal_status == STATUS_SUCCEEDED:  <span class="cm"># 4 = done ✓</span>
+        <span class="kw">return</span> py_trees.common.Status.SUCCESS
+
+    <span class="kw">elif</span> <span class="kw">self</span>.goal_status <span class="kw">in</span> [STATUS_EXECUTING, STATUS_ACCEPTED]:  <span class="cm"># 2, 1</span>
+        <span class="kw">return</span> py_trees.common.Status.RUNNING  <span class="cm"># still going...</span>
+
+    <span class="kw">else</span>:  <span class="cm"># aborted or canceled</span>
+        <span class="kw">self</span>.goal_sent = <span class="kw">False</span>
+        <span class="kw">return</span> py_trees.common.Status.RUNNING  <span class="cm"># will retry next tick</span>`
+    }
+  ]
+}
+
+]; // end SCENARIOS
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let currentScenario = -1;
+let currentStep = 0;
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+function selectScenario(idx) {
+  currentScenario = idx;
+  currentStep = 0;
+
+  // Update card highlights
+  document.querySelectorAll('.s-card').forEach((c,i) => c.classList.toggle('active', i===idx));
+
+  // Show tracer, hide placeholder
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('tracer').style.display = 'block';
+  document.getElementById('finish-card').style.display = 'none';
+
+  buildSteps();
+  renderStep(0, 'right');
+}
+
+function buildSteps() {
+  const s = SCENARIOS[currentScenario];
+  const display = document.getElementById('step-display');
+  display.innerHTML = '';
+
+  s.steps.forEach((step, i) => {
+    const card = document.createElement('div');
+    card.className = 'step-card hidden';
+    card.id = 'step-' + i;
+    card.innerHTML = `
+      <div class="step-badge">${step.badge}</div>
+      <h2>${step.title}</h2>
+      <p class="step-explain">${step.explain}</p>
+      <div class="why-matters">${step.why}</div>
+      <div class="code-wrap">
+        <div class="code-label">In the code: <span>${step.file}</span></div>
+        <pre class="code">${step.code}</pre>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>`;
+    display.appendChild(card);
+  });
+
+  // Dots
+  const dots = document.getElementById('step-dots');
+  dots.innerHTML = '';
+  s.steps.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.title = `Step ${i+1}`;
+    d.onclick = () => goToStep(i);
+    dots.appendChild(d);
+  });
+}
+
+function renderStep(idx, dir) {
+  const s = SCENARIOS[currentScenario];
+  const total = s.steps.length;
+
+  // Hide all cards
+  document.querySelectorAll('.step-card').forEach(c => {
+    c.classList.add('hidden');
+    c.classList.remove('exit-left');
+  });
+
+  // Show current card
+  const card = document.getElementById('step-' + idx);
+  if (card) {
+    card.classList.remove('hidden', 'exit-left');
+    // Trigger reflow for animation
+    card.style.transform = dir === 'right' ? 'translateX(40px)' : 'translateX(-40px)';
+    card.style.opacity = '0';
+    requestAnimationFrame(() => {
+      card.style.transition = 'opacity .25s ease, transform .25s ease';
+      card.style.transform = 'translateX(0)';
+      card.style.opacity = '1';
+    });
+  }
+
+  // Progress bar
+  const pct = total === 1 ? 100 : (idx / (total - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('step-counter').textContent = `Step ${idx+1} / ${total}`;
+
+  // Dots
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+    d.classList.toggle('done', i < idx);
+  });
+
+  // Buttons
+  document.getElementById('btn-prev').disabled = idx === 0;
+  const nextBtn = document.getElementById('btn-next');
+  if (idx === total - 1) {
+    nextBtn.textContent = 'Finish ✓';
+    nextBtn.classList.add('primary');
+  } else {
+    nextBtn.textContent = 'Next →';
+  }
+}
+
+function move(dir) {
+  const s = SCENARIOS[currentScenario];
+  const total = s.steps.length;
+  const next = currentStep + dir;
+
+  if (next >= total) {
+    showFinish();
+    return;
+  }
+  if (next < 0) return;
+
+  const direction = dir > 0 ? 'right' : 'left';
+  currentStep = next;
+  renderStep(currentStep, direction);
+}
+
+function goToStep(idx) {
+  const dir = idx > currentStep ? 'right' : 'left';
+  currentStep = idx;
+  renderStep(currentStep, dir);
+}
+
+function showFinish() {
+  document.querySelectorAll('.step-card').forEach(c => c.classList.add('hidden'));
+  const fc = document.getElementById('finish-card');
+  fc.style.display = 'block';
+  document.getElementById('finish-msg').textContent = SCENARIOS[currentScenario].finish;
+  document.getElementById('btn-next').disabled = true;
+
+  // All dots done
+  document.querySelectorAll('.dot').forEach(d => d.classList.add('done'));
+  document.getElementById('progress-fill').style.width = '100%';
+}
+
+function restart() {
+  document.getElementById('finish-card').style.display = 'none';
+  document.getElementById('tracer').style.display = 'none';
+  document.getElementById('placeholder').style.display = 'block';
+  document.querySelectorAll('.s-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('btn-next').disabled = false;
+  currentScenario = -1;
+  currentStep = 0;
+}
+
+// ── KEYBOARD NAV ──
+document.addEventListener('keydown', e => {
+  if (currentScenario === -1) return;
+  if (document.getElementById('finish-card').style.display === 'block') return;
+  if (e.key === 'ArrowRight') move(1);
+  if (e.key === 'ArrowLeft') move(-1);
+});
+
+// ── COPY CODE ──
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = pre.innerHTML;
+  navigator.clipboard.writeText(tmp.textContent.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

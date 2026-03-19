@@ -1,0 +1,34 @@
+[3.944s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/build --no-deps symlink_data
+[4.884s] running develop
+[5.500s] running egg_info
+[5.501s] creating mecanumbot_leading_behaviour.egg-info
+[5.503s] writing mecanumbot_leading_behaviour.egg-info/PKG-INFO
+[5.503s] writing dependency_links to mecanumbot_leading_behaviour.egg-info/dependency_links.txt
+[5.504s] writing entry points to mecanumbot_leading_behaviour.egg-info/entry_points.txt
+[5.504s] writing requirements to mecanumbot_leading_behaviour.egg-info/requires.txt
+[5.504s] writing top-level names to mecanumbot_leading_behaviour.egg-info/top_level.txt
+[5.504s] writing manifest file 'mecanumbot_leading_behaviour.egg-info/SOURCES.txt'
+[5.510s] reading manifest file 'mecanumbot_leading_behaviour.egg-info/SOURCES.txt'
+[5.512s] writing manifest file 'mecanumbot_leading_behaviour.egg-info/SOURCES.txt'
+[5.516s] running build_ext
+[5.516s] Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/python3.10/site-packages/mecanumbot-leading-behaviour.egg-link (link to .)
+[5.518s] Installing LED_leading_bt_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/mecanumbot_leading_behaviour
+[5.520s] Installing bottom_up_tree_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/mecanumbot_leading_behaviour
+[5.521s] Installing control_leading_bt_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/mecanumbot_leading_behaviour
+[5.521s] Installing doglike_leading_bt_node script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/mecanumbot_leading_behaviour
+[5.522s] 
+[5.522s] Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour
+[5.522s] running symlink_data
+[5.522s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/ament_index
+[5.523s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/ament_index/resource_index
+[5.523s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/ament_index/resource_index/packages
+[5.523s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/resource/mecanumbot_leading_behaviour -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/ament_index/resource_index/packages
+[5.523s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour
+[5.523s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/launch
+[5.523s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/launch/launch_control_sequence.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/launch
+[5.524s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/launch/launch_doglike_sequence.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/launch
+[5.524s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/launch/launch_LED_sequence.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/launch
+[5.524s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/launch/launch_bottomup.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/launch
+[5.524s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/config
+[5.524s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/config/behaviour_setting_constants.yaml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/share/mecanumbot_leading_behaviour/config
+[5.574s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour' returned '0': PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_leading_behaviour/build --no-deps symlink_data

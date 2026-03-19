@@ -1,0 +1,44 @@
+[0.641s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake /home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_behaviours/mecanumbot_behaviours -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours
+[2.500s] -- The C compiler identification is GNU 11.4.0
+[2.501s] -- The CXX compiler identification is GNU 11.4.0
+[2.503s] -- Detecting C compiler ABI info
+[2.508s] -- Detecting C compiler ABI info - done
+[2.508s] -- Check for working C compiler: /usr/bin/cc - skipped
+[2.509s] -- Detecting C compile features
+[2.510s] -- Detecting C compile features - done
+[2.511s] -- Detecting CXX compiler ABI info
+[2.511s] -- Detecting CXX compiler ABI info - done
+[2.511s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[2.512s] -- Detecting CXX compile features
+[2.512s] -- Detecting CXX compile features - done
+[2.512s] -- Found ament_cmake: 1.3.13 (/opt/ros/humble/share/ament_cmake/cmake)
+[2.512s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[2.513s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[2.513s] -- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[2.513s] -- Added test 'lint_cmake' to check CMake code style
+[2.514s] -- Added test 'xmllint' to check XML markup files
+[2.521s] -- Configuring done
+[2.522s] -- Generating done
+[2.522s] -- Build files have been written to: /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours
+[2.523s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake /home/rehawild/Desktop/mecanumbot_new/src/mecanumbot_behaviours/mecanumbot_behaviours -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours
+[2.529s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake --build /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours -- -j8 -l8
+[2.641s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake --build /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours -- -j8 -l8
+[2.667s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake --install /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours
+[2.679s] -- Install configuration: ""
+[2.682s] -- Execute custom install script
+[2.683s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/ament_index/resource_index/package_run_dependencies/mecanumbot_behaviours
+[2.742s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/ament_index/resource_index/parent_prefix_path/mecanumbot_behaviours
+[2.762s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/environment/ament_prefix_path.sh
+[2.775s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/environment/ament_prefix_path.dsv
+[2.792s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/environment/path.sh
+[2.808s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/environment/path.dsv
+[2.823s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/local_setup.bash
+[2.860s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/local_setup.sh
+[2.887s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/local_setup.zsh
+[2.905s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/local_setup.dsv
+[2.923s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/package.dsv
+[2.972s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/ament_index/resource_index/packages/mecanumbot_behaviours
+[2.998s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/cmake/mecanumbot_behavioursConfig.cmake
+[3.023s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/cmake/mecanumbot_behavioursConfig-version.cmake
+[3.112s] -- Symlinking: /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours/share/mecanumbot_behaviours/package.xml
+[3.182s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_teleop:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_sensorprocess_smart:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_led:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_monitor:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_leading_behaviour:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_core:/home/rehawild/ros2_ws/install/my_py_pkg:/opt/ros/humble /usr/bin/cmake --install /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_behaviours

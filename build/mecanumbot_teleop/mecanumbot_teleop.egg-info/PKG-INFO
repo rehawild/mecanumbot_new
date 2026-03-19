@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: mecanumbot-teleop
+Version: 2.3.3
+Summary: Teleoperation node using keyboard for Mecanumbot.
+Home-page: UNKNOWN
+Author: Fortuz
+Author-email: fortuz19@gmail.com
+Maintainer: Fortuz
+Maintainer-email: fortuz19@gmail.com
+License: Apache License, Version 2.0
+Keywords: ROS
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+
+UNKNOWN
+

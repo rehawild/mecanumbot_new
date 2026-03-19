@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mecanumbot — System Documentation</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --bg2: #0d1117;
+  --bg3: #161b22;
+  --bg4: #1c2128;
+  --border: #30363d;
+  --cyan: #39d0d8;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --orange: #f0883e;
+  --red: #f85149;
+  --blue: #58a6ff;
+  --purple: #bc8cff;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --text3: #6e7681;
+  --sidebar-w: 240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow-y:auto;z-index:100;
+}
+#sidebar-header{padding:20px 16px 12px;border-bottom:1px solid var(--border)}
+#sidebar-header h2{font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:0.1em;text-transform:uppercase}
+#sidebar-header p{font-size:11px;color:var(--text3);margin-top:2px}
+#sidebar-search{padding:10px 12px;border-bottom:1px solid var(--border)}
+#sidebar-search input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:6px 10px;border-radius:6px;font-size:12px;outline:none;
+}
+#sidebar-search input:focus{border-color:var(--cyan)}
+nav{padding:8px 0;flex:1}
+nav a{
+  display:block;padding:5px 16px 5px 20px;color:var(--text2);text-decoration:none;
+  font-size:12px;border-left:2px solid transparent;transition:all 0.15s;
+}
+nav a:hover{color:var(--text);background:var(--bg3)}
+nav a.active{color:var(--cyan);border-left-color:var(--cyan);background:rgba(57,208,216,0.06)}
+nav .nav-section{padding:10px 16px 4px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em}
+
+/* ── MAIN ── */
+#main{margin-left:var(--sidebar-w);min-height:100vh}
+section{padding:60px 48px;border-bottom:1px solid var(--border);max-width:1100px}
+
+/* ── HERO ── */
+#hero{
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 60%);
+  padding:80px 48px 60px;max-width:none;border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+#hero::before{
+  content:'';position:absolute;top:-50%;right:-10%;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(57,208,216,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-tag{font-size:11px;color:var(--cyan);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px}
+#hero h1{font-size:48px;font-weight:800;line-height:1.1;margin-bottom:16px}
+#hero h1 span{color:var(--cyan)}
+#hero p.subtitle{font-size:16px;color:var(--text2);max-width:600px;margin-bottom:40px}
+.stats-row{display:flex;gap:32px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:32px;font-weight:800;color:var(--cyan);font-variant-numeric:tabular-nums}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em}
+
+/* ── SECTION HEADERS ── */
+.sec-title{
+  font-size:11px;color:var(--cyan);font-weight:700;letter-spacing:0.15em;
+  text-transform:uppercase;margin-bottom:8px;
+}
+h2.title{font-size:28px;font-weight:700;margin-bottom:16px}
+h3.sub{font-size:18px;font-weight:700;margin:28px 0 12px;color:var(--text)}
+.lead{color:var(--text2);max-width:700px;margin-bottom:32px;line-height:1.7}
+
+/* ── CARDS ── */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.card:hover{border-color:var(--border)}
+.card-header{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.card-title{font-size:15px;font-weight:700;color:var(--text)}
+.card-pkg{font-size:11px;color:var(--text3);background:var(--bg4);padding:2px 8px;border-radius:4px;font-family:monospace}
+.card-desc{color:var(--text2);font-size:13px;margin:12px 0 0;line-height:1.6}
+.chevron{margin-left:auto;color:var(--text3);transition:transform 0.2s;font-size:12px}
+.card.open .chevron{transform:rotate(180deg)}
+.card-body{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.card.open .card-body{display:block}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:8px 12px;background:var(--bg4);color:var(--text3);font-weight:600;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+code{background:var(--bg4);padding:1px 6px;border-radius:4px;font-size:12px;font-family:'Consolas','Cascadia Code',monospace;color:var(--cyan)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em}
+.badge-cyan{background:rgba(57,208,216,0.15);color:var(--cyan)}
+.badge-green{background:rgba(63,185,80,0.15);color:var(--green)}
+.badge-yellow{background:rgba(210,153,34,0.15);color:var(--yellow)}
+.badge-orange{background:rgba(240,136,62,0.15);color:var(--orange)}
+.badge-red{background:rgba(248,81,73,0.15);color:var(--red)}
+.badge-purple{background:rgba(188,140,255,0.15);color:var(--purple)}
+.badge-blue{background:rgba(88,166,255,0.15);color:var(--blue)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.tab{padding:8px 20px;cursor:pointer;color:var(--text2);font-size:13px;font-weight:500;border-bottom:2px solid transparent;transition:all 0.15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-bar input{
+  background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:6px 12px;border-radius:6px;font-size:12px;outline:none;flex:1;min-width:180px;
+}
+.filter-bar input:focus{border-color:var(--cyan)}
+.filter-btn{padding:5px 12px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;cursor:pointer;transition:all 0.15s}
+.filter-btn:hover,.filter-btn.active{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+
+/* ── MISSION CARDS (launch) ── */
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.mission-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:20px;position:relative;overflow:hidden;
+}
+.mission-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.mission-card.robot::before{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.mission-card.pc::before{background:linear-gradient(90deg,var(--purple),var(--blue))}
+.mission-card.behaviour::before{background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.mission-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.mission-where{font-size:11px;color:var(--text3);margin-bottom:12px}
+.mission-nodes{list-style:none}
+.mission-nodes li{font-size:12px;color:var(--text2);padding:3px 0;display:flex;align-items:center;gap:6px}
+.mission-nodes li::before{content:'▸';color:var(--cyan);font-size:10px}
+
+/* ── GOTCHA CARDS ── */
+.gotcha-grid{display:flex;flex-direction:column;gap:12px}
+.gotcha{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px 20px;display:flex;gap:16px}
+.gotcha-num{font-size:22px;font-weight:800;color:var(--text3);min-width:36px;line-height:1}
+.gotcha-content{flex:1}
+.gotcha-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.gotcha-file{font-size:11px;color:var(--text3);margin-bottom:8px;font-family:monospace}
+.gotcha-body{font-size:13px;color:var(--text2);line-height:1.6}
+.gotcha[data-sev="critical"]{border-left:3px solid var(--red)}
+.gotcha[data-sev="warn"]{border-left:3px solid var(--yellow)}
+.gotcha[data-sev="info"]{border-left:3px solid var(--blue)}
+.gotcha.hidden{display:none}
+
+/* ── ARCHITECTURE SVG ── */
+.arch-wrap{overflow-x:auto;margin:24px 0}
+svg.arch{min-width:700px}
+
+/* ── PARAM TABLES ── */
+.param-val{font-family:monospace;font-size:12px}
+.param-val.str{color:var(--green)}
+.param-val.num{color:var(--orange)}
+.param-val.bool{color:var(--purple)}
+
+/* ── COPY BTN ── */
+.copy-wrap{position:relative;margin:12px 0}
+.copy-wrap pre{
+  background:var(--bg4);border:1px solid var(--border);border-radius:6px;
+  padding:14px 16px;font-size:12px;font-family:'Consolas','Cascadia Code',monospace;
+  overflow-x:auto;color:var(--text);line-height:1.5;
+}
+.copy-btn{
+  position:absolute;top:8px;right:8px;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);padding:3px 10px;border-radius:5px;font-size:11px;cursor:pointer;
+  transition:all 0.15s;
+}
+.copy-btn:hover{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.copy-btn.copied{background:var(--green);color:var(--bg);border-color:var(--green)}
+
+/* ── FLOW DIAGRAM ── */
+.flow-box{
+  display:inline-block;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;
+  border:1px solid;white-space:nowrap;
+}
+
+/* ── LAYER STRIP ── */
+.layer{
+  display:flex;align-items:flex-start;gap:16px;margin-bottom:12px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;
+}
+.layer-num{
+  font-size:10px;font-weight:800;color:var(--bg);padding:4px 8px;border-radius:4px;
+  min-width:48px;text-align:center;letter-spacing:0.08em;text-transform:uppercase;
+}
+.layer-content h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.layer-content p{font-size:12px;color:var(--text2)}
+
+/* ── SEARCH HIGHLIGHT ── */
+.hl{background:rgba(57,208,216,0.25);border-radius:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);transition:transform 0.3s}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0}
+  section{padding:40px 20px}
+  #hero{padding:60px 20px 40px}
+  #hero h1{font-size:32px}
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+/* ── ANIMATIONS ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.pulse{animation:pulse 2s infinite}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:slideIn 0.4s ease both}
+
+/* ── HARDWARE TABLE ── */
+.hw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:16px}
+.hw-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px}
+.hw-card h4{font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:6px}
+.hw-card p{font-size:12px;color:var(--text2);margin-bottom:3px}
+.hw-card span{color:var(--text3);font-size:11px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ SIDEBAR ══════════════════ -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h2>Mecanumbot</h2>
+    <p>ROS2 System Docs</p>
+  </div>
+  <div id="sidebar-search">
+    <input type="text" id="global-search" placeholder="Search docs..." autocomplete="off">
+  </div>
+  <nav id="nav">
+    <div class="nav-section">Getting Started</div>
+    <a href="#hero">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <div class="nav-section">Reference</div>
+    <a href="#nodes">Node Encyclopedia</a>
+    <a href="#topics">Topics &amp; Services</a>
+    <a href="#launch">Launch Files</a>
+    <a href="#config">Configuration</a>
+    <div class="nav-section">Gotchas</div>
+    <a href="#gotchas">15 Gotchas</a>
+  </nav>
+</div>
+
+<!-- ══════════════════ MAIN ══════════════════ -->
+<div id="main">
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-tag">ROS2 Humble · Mecanum Drive · Behaviour Trees</div>
+  <h1>Mecanumbot<br><span>System Documentation</span></h1>
+  <p class="subtitle">A robot guide that detects humans with LiDAR, navigates with Nav2, and leads them to a destination using LED signals and expressive gestures.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num" data-target="9">0</div><div class="stat-label">Core Nodes</div></div>
+    <div class="stat"><div class="stat-num" data-target="18">0</div><div class="stat-label">Topics</div></div>
+    <div class="stat"><div class="stat-num" data-target="3">0</div><div class="stat-label">Behaviour Trees</div></div>
+    <div class="stat"><div class="stat-num" data-target="15">0</div><div class="stat-label">Known Gotchas</div></div>
+    <div class="stat"><div class="stat-num" data-target="4">0</div><div class="stat-label">Packages (Robot)</div></div>
+  </div>
+</section>
+
+<!-- ── ARCHITECTURE ── -->
+<section id="architecture">
+  <div class="sec-title">System Design</div>
+  <h2 class="title">Architecture</h2>
+  <p class="lead">The system is split across two compute platforms connected over CycloneDDS (ROS_DOMAIN_ID=19). The Raspberry Pi handles real-time hardware I/O; a separate PC runs perception and behaviour trees.</p>
+
+  <div class="layer">
+    <div class="layer-num" style="background:var(--red)">L1</div>
+    <div class="layer-content">
+      <h4>Hardware Communication</h4>
+      <p><strong>OpenCR</strong> at <code>/dev/ttyACM0</code> @ 57600 baud — custom binary protocol (magic <code>0x55AA</code>, CRC8-CCITT) for 4 mecanum wheels + neck + 2 gripper servos. <strong>Arduino Nano</strong> at <code>/dev/arduino_nano</code> @ 115200 baud — 12-byte XOR-checksum packets for 4 corner LED strips. GPIO 27 drives RS-485 DE/RE direction pin.</p>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-num" style="background:var(--orange)">L2</div>
+    <div class="layer-content">
+      <h4>Sensor Processing &amp; Odometry</h4>
+      <p><code>mecanumbot_sensorproc_node</code> converts OpenCR telemetry at 100 Hz: wheel ticks → mecanum forward kinematics → odometry + TF; IMU quaternion → <code>sensor_msgs/Imu</code>; battery voltage → <code>BatteryState</code>. TF (<code>odom→base_footprint</code>) feeds Nav2 AMCL.</p>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-num" style="background:var(--yellow)">L3</div>
+    <div class="layer-content">
+      <h4>Perception (PC)</h4>
+      <p>DR-SPAAM PyTorch model on the PC. Subscribes to <code>/mecanumbot/scan</code>, fills invalid points, resamples to 240 pts, runs inference, filters conf ≥ 0.85, transforms to map frame, publishes first detection as <code>/mecanumbot/subject_pose</code>.</p>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-num" style="background:var(--green)">L4</div>
+    <div class="layer-content">
+      <h4>Navigation (Nav2)</h4>
+      <p>Behaviour tree sends <code>PoseStamped</code> goals to <code>/goal_pose</code>. Nav2 does all path planning and obstacle avoidance, producing <code>/cmd_vel</code> which <code>mecanumbot_io_node</code> converts to wheel tick commands over serial.</p>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-num" style="background:var(--cyan)">L5</div>
+    <div class="layer-content">
+      <h4>Behaviour Trees (PC)</h4>
+      <p>Three <code>py_trees</code> configurations for different guiding experiments: <em>bottom_up_tree</em> (LED signals only), <em>ctrl_tree</em> (approach+turn, no signals), <em>dog_tree</em> (full dog-like with neck/gripper gestures + checkpoint following). All config via blackboard from <code>behaviour_setting_constants.yaml</code>.</p>
+    </div>
+  </div>
+
+  <h3 class="sub">Data Flow</h3>
+  <div class="arch-wrap">
+    <svg class="arch" viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#39d0d8"/>
+        </marker>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#3fb950"/>
+        </marker>
+        <style>
+          .svg-node{rx:6;ry:6}
+          .svg-label{font-family:system-ui,sans-serif;font-size:11px;fill:#e6edf3;font-weight:600}
+          .svg-sub{font-family:system-ui,sans-serif;font-size:9px;fill:#8b949e}
+          .svg-topic{font-family:monospace;font-size:9px;fill:#39d0d8}
+          .svg-line{stroke:#39d0d8;stroke-width:1.5;fill:none;marker-end:url(#arr)}
+          .svg-line2{stroke:#3fb950;stroke-width:1.5;fill:none;marker-end:url(#arr2)}
+          @keyframes dash{to{stroke-dashoffset:-20}}
+          .anim{stroke-dasharray:6 4;animation:dash 1.5s linear infinite}
+        </style>
+      </defs>
+
+      <!-- LiDAR -->
+      <rect x="20" y="30" width="110" height="44" fill="#1c2128" stroke="#f0883e" class="svg-node"/>
+      <text x="75" y="48" class="svg-label" text-anchor="middle">LD08 LiDAR</text>
+      <text x="75" y="63" class="svg-sub" text-anchor="middle">/dev/ttyUSB0</text>
+
+      <!-- OpenCR -->
+      <rect x="20" y="110" width="110" height="44" fill="#1c2128" stroke="#f0883e" class="svg-node"/>
+      <text x="75" y="128" class="svg-label" text-anchor="middle">OpenCR</text>
+      <text x="75" y="143" class="svg-sub" text-anchor="middle">/dev/ttyACM0</text>
+
+      <!-- Arduino -->
+      <rect x="20" y="190" width="110" height="44" fill="#1c2128" stroke="#f0883e" class="svg-node"/>
+      <text x="75" y="208" class="svg-label" text-anchor="middle">Arduino Nano</text>
+      <text x="75" y="223" class="svg-sub" text-anchor="middle">LEDs</text>
+
+      <!-- IO Node -->
+      <rect x="195" y="100" width="130" height="60" fill="#161b22" stroke="#39d0d8" class="svg-node"/>
+      <text x="260" y="124" class="svg-label" text-anchor="middle">mecanumbot</text>
+      <text x="260" y="139" class="svg-label" text-anchor="middle">_io_node</text>
+      <text x="260" y="153" class="svg-sub" text-anchor="middle">Pi</text>
+
+      <!-- SensorProc -->
+      <rect x="195" y="185" width="130" height="44" fill="#161b22" stroke="#39d0d8" class="svg-node"/>
+      <text x="260" y="204" class="svg-label" text-anchor="middle">sensorproc</text>
+      <text x="260" y="218" class="svg-sub" text-anchor="middle">_node · Pi</text>
+
+      <!-- DR-SPAAM -->
+      <rect x="195" y="20" width="130" height="44" fill="#161b22" stroke="#bc8cff" class="svg-node"/>
+      <text x="260" y="38" class="svg-label" text-anchor="middle">DR-SPAAM</text>
+      <text x="260" y="53" class="svg-sub" text-anchor="middle">Node · PC</text>
+
+      <!-- Nav2 -->
+      <rect x="410" y="100" width="110" height="44" fill="#161b22" stroke="#3fb950" class="svg-node"/>
+      <text x="465" y="118" class="svg-label" text-anchor="middle">Nav2</text>
+      <text x="465" y="133" class="svg-sub" text-anchor="middle">AMCL + Planner</text>
+
+      <!-- Behaviour Tree -->
+      <rect x="410" y="10" width="140" height="60" fill="#161b22" stroke="#d29922" class="svg-node"/>
+      <text x="480" y="30" class="svg-label" text-anchor="middle">Behaviour Tree</text>
+      <text x="480" y="46" class="svg-sub" text-anchor="middle">dog / bottomup / ctrl</text>
+      <text x="480" y="61" class="svg-sub" text-anchor="middle">PC</text>
+
+      <!-- LED Service -->
+      <rect x="410" y="190" width="110" height="44" fill="#161b22" stroke="#39d0d8" class="svg-node"/>
+      <text x="465" y="209" class="svg-label" text-anchor="middle">LED Service</text>
+      <text x="465" y="223" class="svg-sub" text-anchor="middle">Node · Pi</text>
+
+      <!-- Lines: LiDAR → DR-SPAAM -->
+      <line x1="130" y1="52" x2="193" y2="42" class="svg-line anim"/>
+      <text x="162" y="40" class="svg-topic" text-anchor="middle">/scan</text>
+
+      <!-- LiDAR → Nav2 (via top) -->
+      <path d="M 130 52 Q 380 52 408 122" class="svg-line" fill="none"/>
+
+      <!-- OpenCR → IO Node -->
+      <line x1="130" y1="132" x2="193" y2="132" class="svg-line anim"/>
+      <text x="162" y="128" class="svg-topic" text-anchor="middle">serial</text>
+
+      <!-- IO Node → SensorProc -->
+      <line x1="260" y1="160" x2="260" y2="183" class="svg-line anim"/>
+      <text x="285" y="176" class="svg-topic">/opencr_state</text>
+
+      <!-- SensorProc → Nav2 -->
+      <line x1="325" y1="207" x2="408" y2="127" class="svg-line anim"/>
+      <text x="370" y="160" class="svg-topic">/odom /imu</text>
+
+      <!-- DR-SPAAM → BTree -->
+      <line x1="325" y1="42" x2="408" y2="38" class="svg-line anim"/>
+      <text x="367" y="36" class="svg-topic">/subject_pose</text>
+
+      <!-- Nav2 ↔ BTree -->
+      <line x1="465" y1="100" x2="480" y2="72" class="svg-line2"/>
+      <line x1="480" y1="70" x2="465" y2="100" class="svg-line" style="stroke:#d29922;marker-end:url(#arr)"/>
+      <text x="510" y="88" class="svg-topic">/goal_pose</text>
+      <text x="510" y="99" class="svg-topic">/amcl_pose</text>
+
+      <!-- Nav2 → IO (cmd_vel) -->
+      <line x1="410" y1="122" x2="327" y2="122" class="svg-line2"/>
+      <text x="365" y="116" class="svg-topic">/cmd_vel</text>
+
+      <!-- BTree → LED Service -->
+      <line x1="480" y1="70" x2="465" y2="188" class="svg-line" style="stroke:#d29922"/>
+      <text x="500" y="140" class="svg-topic">/set_led_status</text>
+
+      <!-- LED Service → Arduino -->
+      <line x1="410" y1="212" x2="132" y2="212" class="svg-line2"/>
+      <text x="265" y="208" class="svg-topic">serial</text>
+
+      <!-- BTree → IO (cmd_accessory_pos) -->
+      <path d="M 410 38 Q 370 270 327 148" class="svg-line" fill="none" style="stroke:#d29922"/>
+      <text x="338" y="260" class="svg-topic">/cmd_accessory_pos</text>
+
+      <!-- Legend -->
+      <rect x="600" y="290" width="280" height="80" fill="#0d1117" stroke="#30363d" rx="6"/>
+      <line x1="616" y1="310" x2="640" y2="310" stroke="#39d0d8" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="648" y="314" class="svg-sub">Topic / Data flow (Pi network)</text>
+      <line x1="616" y1="330" x2="640" y2="330" stroke="#3fb950" stroke-width="1.5" marker-end="url(#arr2)"/>
+      <text x="648" y="334" class="svg-sub">Nav2 commands / responses</text>
+      <rect x="616" y="344" width="16" height="10" fill="#161b22" stroke="#d29922"/>
+      <text x="648" y="354" class="svg-sub">Behaviour Tree nodes</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ── NODES ── -->
+<section id="nodes">
+  <div class="sec-title">Node Encyclopedia</div>
+  <h2 class="title">All Nodes</h2>
+  <p class="lead">Every ROS2 node in the codebase. Click a card to expand subscriptions, publications, parameters, and key logic.</p>
+
+  <!-- IO Node -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">mecanumbot_io_node</span>
+          <span class="badge badge-green">Pi</span>
+        </div>
+        <span class="card-pkg">mecanumbot_core · mecanumbot_IO_node.py</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">Central hardware bridge between ROS2 and the OpenCR microcontroller. Reads serial telemetry in a background thread, publishes OpenCRState at 100 Hz, converts cmd_vel to mecanum wheel commands, controls GPIO 27 for RS-485 direction.</div>
+    <div class="card-body">
+      <h4 style="color:var(--cyan);font-size:12px;margin-bottom:8px">SUBSCRIPTIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th><th>Action</th></tr>
+        <tr><td><code>/cmd_vel</code></td><td><code>geometry_msgs/Twist</code></td><td>Mecanum IK → 4 wheel ticks, clamped ±300, sent over serial</td></tr>
+        <tr><td><code>/cmd_accessory_pos</code></td><td><code>mecanumbot_msgs/AccessMotorCmd</code></td><td>Neck+gripper positions ×100 → sent over serial</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">PUBLICATIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th><th>Rate</th></tr>
+        <tr><td><code>/mecanumbot/opencr_state</code></td><td><code>mecanumbot_msgs/OpenCRState</code></td><td>100 Hz</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">KEY PARAMETERS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Parameter</th><th>YAML Default</th><th>Description</th></tr>
+        <tr><td><code>dev_params.baudrate</code></td><td><span class="param-val num">57600</span></td><td>Must match OpenCR firmware (code default 1 000 000)</td></tr>
+        <tr><td><code>packet_params.payload_fmt</code></td><td><span class="param-val str">"&lt;23h14f"</span></td><td>Struct format (code default &lt;27h14f)</td></tr>
+        <tr><td><code>robot_params.wheel.radius</code></td><td><span class="param-val num">0.0325</span></td><td>Wheel radius in metres</td></tr>
+        <tr><td><code>robot_params.wheel.separation_x</code></td><td><span class="param-val num">0.129</span></td><td>Front-back wheel centre distance</td></tr>
+        <tr><td><code>robot_params.wheel.separation_y</code></td><td><span class="param-val num">0.300</span></td><td>Left-right wheel centre distance</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">MECANUM INVERSE KINEMATICS</h4>
+      <div class="copy-wrap">
+        <pre>scale = vel_tick/60 × 2π × wheel_radius
+dist  = (sep_x + sep_y) / 2
+
+BL = (Vx + Vy - Wz×dist) / scale   # back-left
+BR = (Vx - Vy + Wz×dist) / scale   # back-right
+FL = (Vx - Vy - Wz×dist) / scale   # front-left
+FR = (Vx + Vy + Wz×dist) / scale   # front-right
+
+Outgoing serial: struct.pack("&lt;7h", BL, BR, FL, FR, N_pos, GL_pos, GR_pos)</pre>
+        <button class="copy-btn" onclick="copyPre(this,event)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SensorProc -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">mecanumbot_sensorproc_node</span>
+          <span class="badge badge-green">Pi</span>
+        </div>
+        <span class="card-pkg">mecanumbot_core · mecanumbot_sensorproc_node.py</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">Converts raw OpenCRState into standard ROS2 sensor messages at 100 Hz: odometry with TF broadcast, IMU, joint states, battery state. The mecanum forward kinematics live here.</div>
+    <div class="card-body">
+      <h4 style="color:var(--cyan);font-size:12px;margin-bottom:8px">SUBSCRIPTIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th></tr>
+        <tr><td><code>/mecanumbot/opencr_state</code></td><td><code>mecanumbot_msgs/OpenCRState</code></td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">PUBLICATIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th><th>Rate</th></tr>
+        <tr><td><code>/mecanumbot/odom</code></td><td><code>nav_msgs/Odometry</code></td><td>100 Hz</td></tr>
+        <tr><td><code>/mecanumbot/imu</code></td><td><code>sensor_msgs/Imu</code></td><td>100 Hz</td></tr>
+        <tr><td><code>/mecanumbot/joint_states</code></td><td><code>sensor_msgs/JointState</code></td><td>100 Hz</td></tr>
+        <tr><td><code>/mecanumbot/battery_state</code></td><td><code>sensor_msgs/BatteryState</code></td><td>100 Hz</td></tr>
+        <tr><td>TF: <code>odom → base_footprint</code></td><td>—</td><td>100 Hz</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">MECANUM FORWARD KINEMATICS</h4>
+      <div class="copy-wrap">
+        <pre>scale = vel_tick/60 × 2π × wheel_radius
+dist  = (sep_x + sep_y) / 2
+
+Vx = (BL + BR + FL + FR) / 4 × scale
+Vy = (BL - BR - FL + FR) / 4 × scale
+Wz = (-BL + BR - FL + FR) / 4 × scale / dist</pre>
+        <button class="copy-btn" onclick="copyPre(this,event)">Copy</button>
+      </div>
+      <p style="font-size:12px;color:var(--yellow);margin-top:8px">⚠ <code>odom_params.from_imu: true</code> is set in YAML but the IMU code path has a TODO — behaviour may differ from pure wheel integration.</p>
+    </div>
+  </div>
+
+  <!-- LED Service -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">mecanumbot_led_service_node</span>
+          <span class="badge badge-green">Pi</span>
+        </div>
+        <span class="card-pkg">mecanumbot_led · led_control_node.py</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">ROS2 service wrapper for the Arduino Nano LED controller. Accepts SetLedStatus / GetLedStatus service calls and sends 12-byte XOR-checksum packets to the Arduino over serial at 115200 baud.</div>
+    <div class="card-body">
+      <h4 style="color:var(--cyan);font-size:12px;margin-bottom:8px">SERVICES</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Service</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>/set_led_status</code></td><td><code>mecanumbot_msgs/SetLedStatus</code></td><td>Set mode+colour for all 4 corner LED strips</td></tr>
+        <tr><td><code>/get_led_status</code></td><td><code>mecanumbot_msgs/GetLedStatus</code></td><td>Read back current LED state</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">LED MODES &amp; COLOURS</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="tbl-wrap"><table>
+          <tr><th>Mode int</th><th>Name</th></tr>
+          <tr><td>1</td><td>WAVE_RIGHT</td></tr>
+          <tr><td>2</td><td>WAVE_LEFT</td></tr>
+          <tr><td>3</td><td>PULSE</td></tr>
+          <tr><td>4</td><td>SOLID</td></tr>
+        </table></div>
+        <div class="tbl-wrap"><table>
+          <tr><th>Color int</th><th>Name</th></tr>
+          <tr><td>0</td><td>BLACK</td></tr>
+          <tr><td>1</td><td>WHITE</td></tr>
+          <tr><td>2</td><td>GREEN</td></tr>
+          <tr><td>3</td><td>RED</td></tr>
+          <tr><td>4</td><td>BLUE</td></tr>
+          <tr><td>5</td><td>CYAN</td></tr>
+          <tr><td>6</td><td>PINK</td></tr>
+          <tr><td>7</td><td>YELLOW</td></tr>
+        </table></div>
+      </div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">TEST COMMAND</h4>
+      <div class="copy-wrap">
+        <pre>ros2 service call /set_led_status mecanumbot_msgs/srv/SetLedStatus "{
+  fl_mode: 4, fl_color: 1,
+  fr_mode: 4, fr_color: 1,
+  br_mode: 4, br_color: 1,
+  bl_mode: 4, bl_color: 1
+}"</pre>
+        <button class="copy-btn" onclick="copyPre(this,event)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DR-SPAAM -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">DrSpaamNode</span>
+          <span class="badge badge-purple">PC</span>
+        </div>
+        <span class="card-pkg">mecanumbot_sensorprocess_smart · mecanumbot_lidar_detect_people.py</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">Runs the DR-SPAAM deep-learning 2D LiDAR person detector on the PC. For each scan: interpolate invalid points, resample to 240 pts, PyTorch inference, confidence filter, TF transform, publish subject pose.</div>
+    <div class="card-body">
+      <h4 style="color:var(--cyan);font-size:12px;margin-bottom:8px">SUBSCRIPTIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th></tr>
+        <tr><td><code>/mecanumbot/scan</code></td><td><code>sensor_msgs/LaserScan</code></td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">PUBLICATIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Topic</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>/mecanumbot/subject_pose</code></td><td><code>geometry_msgs/PoseStamped</code></td><td>First detection in map frame (the person to guide)</td></tr>
+        <tr><td><code>/mecanumbot/dets</code></td><td><code>geometry_msgs/PoseArray</code></td><td>All detections above threshold</td></tr>
+        <tr><td><code>/mecanumbot/dets_marker</code></td><td><code>visualization_msgs/Marker</code></td><td>RViz visualization markers</td></tr>
+      </table></div>
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">KEY PARAMETERS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Parameter</th><th>Default</th><th>Effect</th></tr>
+        <tr><td><code>weight_file</code></td><td><span class="param-val str">"dr_spaam_5_on_frog.pth"</span></td><td>PyTorch checkpoint filename</td></tr>
+        <tr><td><code>conf_thresh</code></td><td><span class="param-val num">0.85</span></td><td>Raise = fewer false positives, lower = more detections</td></tr>
+        <tr><td><code>stride</code></td><td><span class="param-val num">1</span></td><td>DR-SPAAM inference stride</td></tr>
+      </table></div>
+      <p style="font-size:12px;color:var(--yellow);margin-top:8px">⚠ XY axes are swapped and negated inside <code>_parse_subject_pose()</code> to convert detector coords to ROS convention. Always <code>poses[0]</code> — no tracking, no identity assignment.</p>
+    </div>
+  </div>
+
+  <!-- Behaviour Tree Nodes -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">Behaviour Tree Behaviours</span>
+          <span class="badge badge-yellow">PC</span>
+        </div>
+        <span class="card-pkg">mecanumbot_leading_behaviour · behaviours/</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">py_trees behaviour classes that form the three guiding trees. All share a common blackboard populated by ConstantParamsToBlackboard at startup.</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Class</th><th>Type</th><th>What it does</th></tr>
+        <tr><td><code>ConstantParamsToBlackboard</code></td><td>Action</td><td>Reads YAML config, writes all mission params to blackboard. Runs once on startup.</td></tr>
+        <tr><td><code>DistanceToBlackboard</code></td><td>Action</td><td>Computes euclidean distances: robot↔subject, subject↔target, robot↔target. Updates blackboard every tick.</td></tr>
+        <tr><td><code>TurnToward</code></td><td>Action</td><td>Sends a <code>/goal_pose</code> to Nav2 that makes the robot face a direction. Uses <code>/navigate_to_pose</code> action status to detect completion.</td></tr>
+        <tr><td><code>Approach</code></td><td>Action</td><td>Sends a navigation goal a fixed distance toward the subject/target. Monitors Nav2 action status.</td></tr>
+        <tr><td><code>CheckSubjectTargetSuccess</code></td><td>Condition</td><td>Succeeds if subject is within <code>target_reached_threshold</code> of the target. Triggers mission completion.</td></tr>
+        <tr><td><code>LEDBehaviourSequence</code></td><td>Action</td><td>Calls <code>/set_led_status</code> service in a timed loop. Plays back LED sequences from YAML config.</td></tr>
+        <tr><td><code>DogBehaviourSequence</code></td><td>Action</td><td>Sends timed <code>AccessMotorCmd</code> sequences for neck nods and gripper opens — the "dog" gesture animations.</td></tr>
+        <tr><td><code>DogCheckFollowing</code></td><td>Condition</td><td>Compares subject distance from last tick to current. If delta &gt; <code>Dog_following_max_threshold</code> the subject is "lost".</td></tr>
+        <tr><td><code>DogSelectTarget</code></td><td>Action</td><td>Finds closest checkpoint to robot, then increments index by 1. Robot always drives to the <em>next</em> checkpoint, not the nearest.</td></tr>
+      </table></div>
+
+      <h4 style="color:var(--cyan);font-size:12px;margin:16px 0 8px">TREE CONFIGURATIONS</h4>
+      <div class="tbl-wrap"><table>
+        <tr><th>Executable</th><th>File</th><th>Tick Rate</th><th>Description</th></tr>
+        <tr><td><code>bottom_up_tree_node</code></td><td>bottom_up_tree.py</td><td>100 Hz</td><td>LED-based guiding, light signals only</td></tr>
+        <tr><td><code>bottom_up_tree_node</code></td><td>ctrl_tree.py</td><td>100 Hz</td><td>Simple approach+turn, no signals</td></tr>
+        <tr><td><code>doglike_leading_bt_node</code></td><td>dog_tree.py</td><td>10 Hz</td><td>Full dog-like: gestures + checkpoint following</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- Monitor nodes -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">Monitor Nodes</span>
+          <span class="badge badge-green">Pi</span>
+        </div>
+        <span class="card-pkg">mecanumbot_monitor · accessory_monitor.py / wheel_monitor.py</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">Debug/test nodes. accessory_monitor sends sinusoidal neck motions; wheel_monitor publishes test wheel velocities. Not part of normal operation.</div>
+    <div class="card-body">
+      <p style="color:var(--red);font-size:13px">⚠ <strong>BUG:</strong> <code>accessory_monitor.py</code> calls <code>main()</code> recursively inside its <code>finally</code> block. Every keyboard interrupt grows the call stack. <code>wheel_monitor.py</code> does not have this bug.</p>
+    </div>
+  </div>
+
+  <!-- Teleop + GUI -->
+  <div class="card" onclick="toggleCard(this)">
+    <div class="card-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="card-title">Teleop &amp; LED GUI</span>
+          <span class="badge badge-purple">PC</span>
+        </div>
+        <span class="card-pkg">mecanumbot_teleop · mecanumbot_ledgui</span>
+      </div>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="card-desc">MecanumbotJoyTeleop maps joystick axes to cmd_vel and accessory commands. mecanumbot_ledgui_client is a Tkinter window for manually controlling LED strips.</div>
+    <div class="card-body">
+      <div class="tbl-wrap"><table>
+        <tr><th>Node</th><th>Publishes to</th><th>Max speed</th></tr>
+        <tr><td><code>mecanumbot_joystick</code></td><td><code>/cmd_vel</code>, <code>/cmd_accessory_pos</code></td><td>0.234 m/s → ~300 ticks (hits clamp)</td></tr>
+        <tr><td><code>mecanumbot_ledgui_client</code></td><td>calls <code>/set_led_status</code>, <code>/get_led_status</code></td><td>—</td></tr>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOPICS & SERVICES ── -->
+<section id="topics">
+  <div class="sec-title">Communication</div>
+  <h2 class="title">Topics &amp; Services</h2>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(this,'tab-topics')">Topics</div>
+    <div class="tab" onclick="switchTab(this,'tab-services')">Services</div>
+    <div class="tab" onclick="switchTab(this,'tab-msgs')">Message Types</div>
+  </div>
+
+  <div id="tab-topics" class="tab-panel active">
+    <div class="filter-bar">
+      <input type="text" placeholder="Filter topics..." oninput="filterTable(this,'topics-tbl')">
+    </div>
+    <div class="tbl-wrap">
+      <table id="topics-tbl">
+        <tr><th>Topic</th><th>Message Type</th><th>Publisher</th><th>Subscriber(s)</th></tr>
+        <tr><td><code>/mecanumbot/opencr_state</code></td><td><code>mecanumbot_msgs/OpenCRState</code></td><td>io_node</td><td>sensorproc_node</td></tr>
+        <tr><td><code>/cmd_vel</code></td><td><code>geometry_msgs/Twist</code></td><td>teleop / Nav2 / BTree</td><td>io_node</td></tr>
+        <tr><td><code>/cmd_accessory_pos</code></td><td><code>mecanumbot_msgs/AccessMotorCmd</code></td><td>teleop / BTree</td><td>io_node</td></tr>
+        <tr><td><code>/mecanumbot/odom</code></td><td><code>nav_msgs/Odometry</code></td><td>sensorproc_node</td><td>Nav2</td></tr>
+        <tr><td><code>/mecanumbot/imu</code></td><td><code>sensor_msgs/Imu</code></td><td>sensorproc_node</td><td>Nav2</td></tr>
+        <tr><td><code>/mecanumbot/joint_states</code></td><td><code>sensor_msgs/JointState</code></td><td>sensorproc_node</td><td>robot_state_publisher</td></tr>
+        <tr><td><code>/mecanumbot/battery_state</code></td><td><code>sensor_msgs/BatteryState</code></td><td>sensorproc_node</td><td>(monitoring)</td></tr>
+        <tr><td><code>/mecanumbot/scan</code></td><td><code>sensor_msgs/LaserScan</code></td><td>ld08_driver</td><td>DrSpaamNode, Nav2</td></tr>
+        <tr><td><code>/mecanumbot/dets</code></td><td><code>geometry_msgs/PoseArray</code></td><td>DrSpaamNode</td><td>(visualization)</td></tr>
+        <tr><td><code>/mecanumbot/dets_marker</code></td><td><code>visualization_msgs/Marker</code></td><td>DrSpaamNode</td><td>RViz</td></tr>
+        <tr><td><code>/mecanumbot/subject_pose</code></td><td><code>geometry_msgs/PoseStamped</code></td><td>DrSpaamNode</td><td>BTree behaviours</td></tr>
+        <tr><td><code>/goal_pose</code></td><td><code>geometry_msgs/PoseStamped</code></td><td>TurnToward, Approach</td><td>Nav2</td></tr>
+        <tr><td><code>/amcl_pose</code></td><td><code>geometry_msgs/PoseWithCovarianceStamped</code></td><td>Nav2 AMCL</td><td>BTree behaviours</td></tr>
+        <tr><td><code>/navigate_to_pose/_action/status</code></td><td><code>action_msgs/GoalStatusArray</code></td><td>Nav2</td><td>TurnToward, Approach</td></tr>
+        <tr><td><code>/joy</code></td><td><code>sensor_msgs/Joy</code></td><td>joy driver</td><td>MecanumbotJoyTeleop</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="tab-services" class="tab-panel">
+    <div class="tbl-wrap"><table>
+      <tr><th>Service</th><th>Type</th><th>Server</th><th>Clients</th></tr>
+      <tr><td><code>/set_led_status</code></td><td><code>mecanumbot_msgs/SetLedStatus</code></td><td>led_service_node</td><td>LEDBehaviourSequence, ConstantParamsToBlackboard, ledgui</td></tr>
+      <tr><td><code>/get_led_status</code></td><td><code>mecanumbot_msgs/GetLedStatus</code></td><td>led_service_node</td><td>ledgui</td></tr>
+    </table></div>
+  </div>
+
+  <div id="tab-msgs" class="tab-panel">
+    <h3 class="sub" style="margin-top:0">OpenCRState.msg</h3>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Primary hardware telemetry. All wheel data in raw integer <strong>tick</strong> units. Published by io_node at 100 Hz.</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>Field(s)</th><th>Type</th><th>Meaning</th></tr>
+      <tr><td><code>header</code></td><td>std_msgs/Header</td><td>Timestamp</td></tr>
+      <tr><td><code>cmd_vel_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Commanded wheel velocities (ticks)</td></tr>
+      <tr><td><code>vel_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Measured wheel velocities (ticks)</td></tr>
+      <tr><td><code>pos_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Wheel encoder positions (ticks) — NOT used in JointState</td></tr>
+      <tr><td><code>curr_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Motor currents</td></tr>
+      <tr><td><code>acc_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Wheel accelerations</td></tr>
+      <tr><td><code>pos_n / pos_gl / pos_gr</code></td><td>int16 ×3</td><td>Neck + gripper servo positions (ticks)</td></tr>
+      <tr><td><code>err_bl/br/fl/fr</code></td><td>int16 ×4</td><td>Motor errors — only in 27-field firmware, never populated with YAML &lt;23h14f</td></tr>
+      <tr><td><code>battery_voltage</code></td><td>float32</td><td>Battery voltage in Volts</td></tr>
+      <tr><td><code>imu_angular_vel_x/y/z</code></td><td>float32 ×3</td><td>Gyroscope (rad/s)</td></tr>
+      <tr><td><code>imu_linear_acc_x/y/z</code></td><td>float32 ×3</td><td>Accelerometer (m/s²)</td></tr>
+      <tr><td><code>imu_magnetic_x/y/z</code></td><td>float32 ×3</td><td>Magnetometer</td></tr>
+      <tr><td><code>imu_orientation_w/x/y/z</code></td><td>float32 ×4</td><td>Orientation quaternion from OpenCR IMU</td></tr>
+    </table></div>
+
+    <h3 class="sub">AccessMotorCmd.msg</h3>
+    <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Command message for neck + gripper. Values in <strong>radians</strong>, scaled ×100 inside io_node before serial transmission.</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>Field</th><th>Type</th><th>Range</th><th>Meaning</th></tr>
+      <tr><td><code>n_pos</code></td><td>float32</td><td>2.0 – 8.6 rad</td><td>Neck servo target (min=2.0, mid=5.3, max=8.6)</td></tr>
+      <tr><td><code>gl_pos</code></td><td>float32</td><td>1.6 – 8.54 rad</td><td>Left gripper target (neutral=5.12)</td></tr>
+      <tr><td><code>gr_pos</code></td><td>float32</td><td>1.6 – 8.54 rad</td><td>Right gripper target (neutral=5.12)</td></tr>
+    </table></div>
+
+    <h3 class="sub">SetLedStatus.srv</h3>
+    <div class="tbl-wrap"><table>
+      <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+      <tr><td><code>fl_mode / fr_mode / br_mode / bl_mode</code></td><td>int8</td><td>Animation mode per LED (1=WAVE_RIGHT, 2=WAVE_LEFT, 3=PULSE, 4=SOLID)</td></tr>
+      <tr><td><code>fl_color / fr_color / br_color / bl_color</code></td><td>int8</td><td>Color per LED (0=BLACK … 7=YELLOW)</td></tr>
+      <tr><td colspan="3" style="color:var(--text3);font-size:11px">Response: bool success, string message</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ── LAUNCH FILES ── -->
+<section id="launch">
+  <div class="sec-title">Startup</div>
+  <h2 class="title">Launch Files</h2>
+  <p class="lead">All launch files with what they start and where they run.</p>
+
+  <h3 class="sub">On Robot (Raspberry Pi)</h3>
+  <div class="mission-grid">
+    <div class="mission-card robot">
+      <div class="mission-title">launch_mecanumbot_base.launch.py</div>
+      <div class="mission-where"><span class="badge badge-green">Pi</span> mecanumbot_bringup — run at bringup</div>
+      <ul class="mission-nodes">
+        <li>mecanumbot_io_node (namespace: mecanumbot)</li>
+        <li>mecanumbot_sensorproc_node</li>
+        <li>ld08_driver → /dev/ttyUSB0</li>
+        <li>includes mecanumbot_state_publisher</li>
+        <li>robot_state_publisher (URDF + TF)</li>
+      </ul>
+    </div>
+    <div class="mission-card robot">
+      <div class="mission-title">mapping.launch.py</div>
+      <div class="mission-where"><span class="badge badge-green">Pi</span> Create a new map</div>
+      <ul class="mission-nodes">
+        <li>SLAM Toolbox with mecanumbot_slam_mapping.yaml</li>
+        <li>Use while teleoperating to build the map</li>
+      </ul>
+    </div>
+    <div class="mission-card robot">
+      <div class="mission-title">map.launch.py</div>
+      <div class="mission-where"><span class="badge badge-green">Pi</span> Navigate with pre-built map</div>
+      <ul class="mission-nodes">
+        <li>Nav2 stack: planner + controller</li>
+        <li>AMCL localization</li>
+        <li>nav2_params.yaml + mecanumbot_custom_nav2.yaml</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub">Behaviour Trees (PC)</h3>
+  <div class="mission-grid">
+    <div class="mission-card behaviour">
+      <div class="mission-title">launch_bottomup.launch.py</div>
+      <div class="mission-where"><span class="badge badge-yellow">PC</span> LED-based guiding only</div>
+      <ul class="mission-nodes">
+        <li>bottom_up_tree_node @ 100 Hz</li>
+        <li>LED light signals, no gestures</li>
+        <li>Params: behaviour_setting_constants.yaml</li>
+      </ul>
+    </div>
+    <div class="mission-card behaviour">
+      <div class="mission-title">launch_doglike_sequence.launch.py</div>
+      <div class="mission-where"><span class="badge badge-yellow">PC</span> Full dog-like guiding</div>
+      <ul class="mission-nodes">
+        <li>doglike_leading_bt_node @ 10 Hz</li>
+        <li>Neck nods + gripper gestures</li>
+        <li>Checkpoint-following with loss detection</li>
+      </ul>
+    </div>
+    <div class="mission-card behaviour">
+      <div class="mission-title">launch_control_sequence.launch.py</div>
+      <div class="mission-where"><span class="badge badge-yellow">PC</span> Simple approach + turn</div>
+      <ul class="mission-nodes">
+        <li>bottom_up_tree_node (ctrl_tree.py logic)</li>
+        <li>No LED or gesture signals</li>
+        <li>Minimal experiment condition</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub">Remote / PC Tools</h3>
+  <div class="mission-grid">
+    <div class="mission-card pc">
+      <div class="mission-title">mecanumbot_peopledetect.launch.py</div>
+      <div class="mission-where"><span class="badge badge-purple">PC</span> Person detection</div>
+      <ul class="mission-nodes">
+        <li>DrSpaamNode in namespace mecanumbot</li>
+        <li>lidar_peopledetect_config.yaml</li>
+        <li>Must run for behaviour trees to work</li>
+      </ul>
+    </div>
+    <div class="mission-card pc">
+      <div class="mission-title">launch_joy_teleop.launch.py</div>
+      <div class="mission-where"><span class="badge badge-purple">PC</span> Joystick teleoperation</div>
+      <ul class="mission-nodes">
+        <li>mecanumbot_joystick node</li>
+        <li>Requires: ros2 run joy joy_node</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub">Startup Sequences</h3>
+  <div class="copy-wrap">
+    <pre># ── Manual Teleoperation ──────────────────────────────────
+# On Pi:
+ros2 launch mecanumbot_bringup launch_mecanumbot_base.launch.py
+ros2 run mecanumbot_led mecanumbot_led_service          # optional
+
+# On PC:
+ros2 run joy joy_node
+ros2 launch mecanumbot_teleop launch_joy_teleop.launch.py
+
+# ── Autonomous Dog-Like Guiding ───────────────────────────
+# On Pi:
+ros2 launch mecanumbot_bringup launch_mecanumbot_base.launch.py
+ros2 run mecanumbot_led mecanumbot_led_service
+ros2 launch mecanumbot_bringup map.launch.py            # Nav2 + AMCL
+
+# On PC:
+ros2 launch mecanumbot_sensorprocess_smart mecanumbot_peopledetect.launch.py
+ros2 launch mecanumbot_leading_behaviour launch_doglike_sequence.launch.py</pre>
+    <button class="copy-btn" onclick="copyPre(this,event)">Copy</button>
+  </div>
+</section>
+
+<!-- ── CONFIGURATION ── -->
+<section id="config">
+  <div class="sec-title">Parameters</div>
+  <h2 class="title">Configuration Files</h2>
+  <p class="lead">All YAML parameter files and what operators need to change.</p>
+
+  <h3 class="sub">mecanumbot.yaml <span style="font-size:12px;color:var(--text3);font-weight:400">— mecanumbot_description/param/</span></h3>
+  <p style="color:var(--text2);font-size:13px;margin-bottom:12px">Primary runtime config for on-robot nodes. Loaded by launch_mecanumbot_base.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Parameter</th><th>Value</th><th>Note</th></tr>
+    <tr><td><code>dev_params.device_name</code></td><td><span class="param-val str">"/dev/ttyACM0"</span></td><td>Change if port assignment changes</td></tr>
+    <tr><td><code>dev_params.baudrate</code></td><td><span class="param-val num">57600</span></td><td>⚠ Code default is 1 000 000</td></tr>
+    <tr><td><code>packet_params.payload_fmt</code></td><td><span class="param-val str">"&lt;23h14f"</span></td><td>⚠ Code default is &lt;27h14f (4 extra error fields)</td></tr>
+    <tr><td><code>robot_params.wheel.radius</code></td><td><span class="param-val num">0.0325</span> m</td><td>Change if wheels replaced</td></tr>
+    <tr><td><code>robot_params.wheel.separation_x</code></td><td><span class="param-val num">0.129</span> m</td><td>Front-back wheel centres</td></tr>
+    <tr><td><code>robot_params.wheel.separation_y</code></td><td><span class="param-val num">0.300</span> m</td><td>Left-right wheel centres</td></tr>
+    <tr><td><code>robot_params.wheel.vel_tick</code></td><td><span class="param-val num">0.299</span></td><td>Meaning of one tick in rot/min</td></tr>
+    <tr><td><code>odom_params.from_imu</code></td><td><span class="param-val bool">true</span></td><td>Use IMU for heading (has TODO in source)</td></tr>
+    <tr><td><code>battery.min_voltage</code></td><td><span class="param-val num">11.0</span> V</td><td>Code default 9.9 V; sets 0% level</td></tr>
+    <tr><td><code>battery.max_voltage</code></td><td><span class="param-val num">12.6</span> V</td><td>Sets 100% level</td></tr>
+  </table></div>
+
+  <h3 class="sub">lidar_peopledetect_config.yaml <span style="font-size:12px;color:var(--text3);font-weight:400">— mecanumbot_sensorprocess_smart/config/</span></h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Parameter</th><th>Value</th><th>Note</th></tr>
+    <tr><td><code>weight_file</code></td><td><span class="param-val str">"dr_spaam_5_on_frog.pth"</span></td><td>Put .pth in models/ and update this</td></tr>
+    <tr><td><code>conf_thresh</code></td><td><span class="param-val num">0.85</span></td><td>Raise = fewer false positives</td></tr>
+    <tr><td><code>stride</code></td><td><span class="param-val num">1</span></td><td>DR-SPAAM inference stride</td></tr>
+    <tr><td><code>scan_topic</code></td><td><span class="param-val str">"scan"</span></td><td>Input LaserScan topic</td></tr>
+  </table></div>
+
+  <h3 class="sub">behaviour_setting_constants.yaml <span style="font-size:12px;color:var(--text3);font-weight:400">— mecanumbot_leading_behaviour/config/</span></h3>
+  <p style="color:var(--text2);font-size:13px;margin-bottom:12px">The main file operators edit to configure a guiding mission.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Parameter</th><th>Value</th><th>Description</th></tr>
+    <tr><td><code>target_position</code></td><td><span class="param-val str">[-2.765, -6.123, 0.0]</span></td><td>Destination in map frame (metres)</td></tr>
+    <tr><td><code>robot_closeness_threshold</code></td><td><span class="param-val num">0.25</span> m</td><td>Robot stops this far from subject/target</td></tr>
+    <tr><td><code>target_reached_threshold</code></td><td><span class="param-val num">0.75</span> m</td><td>Subject considered "at target" within this distance</td></tr>
+    <tr><td><code>robot_approach_distance</code></td><td><span class="param-val num">1.0</span> m</td><td>Step size in fixed_distance approach mode</td></tr>
+    <tr><td><code>visibility_time_threshold</code></td><td><span class="param-val num">5</span> s</td><td>Seconds without detection before fallback</td></tr>
+    <tr><td><code>Dog_following_max_threshold</code></td><td><span class="param-val num">0.20</span> m</td><td>Max distance increase per step before "lost"</td></tr>
+    <tr><td><code>Dog_max_wander_allowed</code></td><td><span class="param-val num">5</span></td><td>Max wander events before giving up</td></tr>
+    <tr><td><code>Dog_checkpoints</code></td><td>6 × {X,Y,Z}</td><td>Waypoints for dog-mode path (map coords)</td></tr>
+  </table></div>
+
+  <h3 class="sub">Quick Reference: What to Change</h3>
+  <div class="tbl-wrap"><table>
+    <tr><th>Task</th><th>File</th><th>Parameter</th></tr>
+    <tr><td>Change destination</td><td>behaviour_setting_constants.yaml</td><td><code>target_position</code></td></tr>
+    <tr><td>Change waypoint path</td><td>behaviour_setting_constants.yaml</td><td><code>Dog_checkpoints</code></td></tr>
+    <tr><td>Tune person detection</td><td>lidar_peopledetect_config.yaml</td><td><code>conf_thresh</code></td></tr>
+    <tr><td>Update OpenCR baud rate</td><td>mecanumbot.yaml</td><td><code>dev_params.baudrate</code></td></tr>
+    <tr><td>Update packet format</td><td>mecanumbot.yaml</td><td><code>packet_params.payload_fmt</code></td></tr>
+    <tr><td>Change wheel dimensions</td><td>mecanumbot.yaml</td><td><code>robot_params.wheel.*</code></td></tr>
+    <tr><td>Disable IMU heading</td><td>mecanumbot.yaml</td><td><code>odom_params.from_imu: false</code></td></tr>
+    <tr><td>Swap DR-SPAAM model</td><td>lidar_peopledetect_config.yaml</td><td><code>weight_file</code></td></tr>
+  </table></div>
+
+  <h3 class="sub">Hardware</h3>
+  <div class="hw-grid">
+    <div class="hw-card">
+      <h4>OpenCR</h4>
+      <p>/dev/ttyACM0 · 57600 baud</p>
+      <p>4 wheel motors + neck + 2 gripper servos</p>
+      <span>Custom binary protocol, CRC8-CCITT</span>
+    </div>
+    <div class="hw-card">
+      <h4>Arduino Nano</h4>
+      <p>/dev/arduino_nano · 115200 baud</p>
+      <p>4 corner LED strips (WS2812-style)</p>
+      <span>12-byte XOR-checksum packet</span>
+    </div>
+    <div class="hw-card">
+      <h4>LD08 LiDAR</h4>
+      <p>/dev/ttyUSB0</p>
+      <p>360° laser scan, navigation + person detection</p>
+      <span>Resampled to 240 pts for DR-SPAAM</span>
+    </div>
+    <div class="hw-card">
+      <h4>GPIO 27 (RS-485)</h4>
+      <p>wiringpi · DE/RE direction pin</p>
+      <p>HIGH before write, LOW after 100 ms sleep</p>
+      <span>Limits motor cmd rate to 10 Hz</span>
+    </div>
+    <div class="hw-card">
+      <h4>Raspberry Pi</h4>
+      <p>Runs on-robot ROS2 nodes</p>
+      <p>ROS2 Humble, Ubuntu 22.04</p>
+      <span>ROS_DOMAIN_ID=19, CycloneDDS</span>
+    </div>
+    <div class="hw-card">
+      <h4>PiCamera</h4>
+      <p>picamera_config.yaml</p>
+      <p>RGB camera on servo neck</p>
+      <span>Separate camera.launch.py</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── GOTCHAS ── -->
+<section id="gotchas">
+  <div class="sec-title">Watch Out</div>
+  <h2 class="title">15 Gotchas</h2>
+  <p class="lead">Non-obvious things that will surprise you. Read before touching any code.</p>
+
+  <div class="filter-bar">
+    <input type="text" id="gotcha-search" placeholder="Search gotchas..." oninput="filterGotchas()">
+    <button class="filter-btn active" onclick="filterSev(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterSev(this,'critical')">Critical</button>
+    <button class="filter-btn" onclick="filterSev(this,'warn')">Warning</button>
+    <button class="filter-btn" onclick="filterSev(this,'info')">Info</button>
+  </div>
+
+  <div class="gotcha-grid" id="gotcha-grid">
+
+    <div class="gotcha" data-sev="critical" data-text="packet format mismatch yaml code baudrate payload_fmt opencr firmware">
+      <div class="gotcha-num">01</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">Packet Format Mismatch Between YAML and Code</span>
+          <span class="badge badge-red">Critical</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_IO_node.py vs mecanumbot.yaml</div>
+        <div class="gotcha-body">Code default for <code>payload_fmt</code> is <code>&lt;27h14f</code> (27 × int16 + 14 × float32 = 82 bytes) but YAML overrides to <code>&lt;23h14f</code> (74 bytes). The four <code>err_bl/br/fl/fr</code> error fields are <strong>never populated</strong> when running from YAML. Similarly, <code>baudrate</code> defaults to 1 000 000 in code but YAML sets it to 57 600. The YAML always wins. If you update the OpenCR firmware, check both.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="warn" data-text="100ms serial write delay 10hz motor command rate rs485 gpio">
+      <div class="gotcha-num">02</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">100 ms Serial Write Delay Limits Command Rate to 10 Hz</span>
+          <span class="badge badge-yellow">Warning</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_IO_node.py · update_motor_cmds_out()</div>
+        <div class="gotcha-body">A <code>time.sleep(0.1)</code> is held while <code>cmd_lock</code> is acquired. GPIO 27 is toggled HIGH before the write and LOW after the sleep — RS-485 direction control. Motor commands are capped at ~10 Hz even if <code>/cmd_vel</code> fires faster.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="critical" data-text="behaviour tree node name collision same name bottom_up_tree ctrl_tree dog_tree">
+      <div class="gotcha-num">03</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">All Three Behaviour Trees Share the Same Node Name</span>
+          <span class="badge badge-red">Critical</span>
+        </div>
+        <div class="gotcha-file">bottom_up_tree.py, ctrl_tree.py, dog_tree.py</div>
+        <div class="gotcha-body">All three call <code>tree_node.setup(node_name="bottom_up_tree_node")</code>. Running two trees on the same machine causes a <strong>node name collision</strong>. Both <code>ctrl_tree.py</code> and <code>bottom_up_tree.py</code> executables register as <code>bottom_up_tree_node</code>.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="critical" data-text="accessory_monitor recursive main call stack bug finally">
+      <div class="gotcha-num">04</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">accessory_monitor Calls main() Recursively</span>
+          <span class="badge badge-red">Bug</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_monitor/accessory_monitor.py ~line 79</div>
+        <div class="gotcha-body">Inside the <code>finally</code> block: <code>main()</code> is called again after shutdown. Every keyboard interrupt or error grows the stack. <code>wheel_monitor.py</code> does NOT have this bug.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="warn" data-text="dr-spaam first detection poses[0] no tracking person identity multi-person">
+      <div class="gotcha-num">05</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">DR-SPAAM Always Uses the First Detection as Subject</span>
+          <span class="badge badge-yellow">Warning</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_lidar_detect_people.py · _parse_subject_pose()</div>
+        <div class="gotcha-body">DR-SPAAM returns detections in scan order, not sorted by confidence or proximity. In a multi-person environment, <code>poses[0]</code> can jump between different people as they move. <strong>There is no person tracking or identity assignment.</strong></div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="dr-spaam xy axes swapped negated coordinate convention ros">
+      <div class="gotcha-num">06</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">DR-SPAAM XY Axes Are Swapped and Negated</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_lidar_detect_people.py</div>
+        <div class="gotcha-body"><code>dets_xy = -1 * dets_xy</code> then <code>p.position.x = xy[1]; p.position.y = xy[0]</code>. Both operations adjust for detector internal convention vs. ROS convention (x forward, y left). If you change LiDAR mount orientation or swap detectors, revisit this.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="read_feedback global singleton state function dict led multiple instances">
+      <div class="gotcha-num">07</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">read_feedback() Has Global Singleton State</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_led/led_control_node.py</div>
+        <div class="gotcha-body">State machine variables are stored on the function object itself (<code>read_feedback.__dict__</code>). Multiple <code>LedServiceNode</code> instances would share the same state machine. Fine for single-node use.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="led duration_ms hardcoded 1000 cannot change service arduino firmware">
+      <div class="gotcha-num">08</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">LED duration_ms Is Hardcoded at 1000 ms</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_led/led_control_node.py</div>
+        <div class="gotcha-body"><code>self.duration_ms = 1000</code> is never changed. The <code>SetLedStatus</code> service has no duration field. The Arduino always receives a 1 second duration. Must edit Python source to change it.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="warn" data-text="DogSelectTarget checkpoint next not closest off by one increment forward progress">
+      <div class="gotcha-num">09</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">DogSelectTarget Always Targets the Next Checkpoint, Not the Closest</span>
+          <span class="badge badge-yellow">Warning</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_leading_behaviour/behaviours/dog_behaviours.py</div>
+        <div class="gotcha-body">After finding the closest checkpoint to the robot, <code>closest_index += 1</code>. The robot always drives to the checkpoint <em>after</em> the nearest one. Ensures forward progress but can cause large jumps if the robot is placed out of sequence.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="velocity clamping silent 300 ticks no warning log teleop max">
+      <div class="gotcha-num">10</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">Velocity Clamping Is Silent</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_IO_node.py · vel_cmd_callback()</div>
+        <div class="gotcha-body">Wheel velocities are clamped to ±300 ticks with no warning logged. Teleop max (0.234 m/s) produces exactly ~300 ticks so the clamp never fires in normal operation. A behaviour tree sending large velocities will be <strong>silently saturated</strong>.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="warn" data-text="lidar scan resampled 240 points hardcoded ld08 dr-spaam model trained">
+      <div class="gotcha-num">11</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">Scan Is Resampled to 240 Points — Hardcoded</span>
+          <span class="badge badge-yellow">Warning</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_lidar_detect_people.py</div>
+        <div class="gotcha-body">240 is a hardcoded default argument in <code>scan_callback</code>. The LD08 produces a different number of points, so interpolation always runs. If you swap to a LiDAR with a different count, interpolation still runs. If the DR-SPAAM model was trained with a different count, inference quality will degrade.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="wheel joint positions zero rviz encoder not used JointState hardcoded">
+      <div class="gotcha-num">12</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">Wheel Joint Positions Are Always Zero</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_sensorproc_node.py · set_joint_state()</div>
+        <div class="gotcha-body">The four wheel joint positions are hardcoded to <code>0.0</code>. The OpenCR reports <code>pos_bl/br/fl/fr</code> but they are not used here. Wheel meshes in RViz do not rotate.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="SensorState orphaned turtlebot3 not used published subscribed">
+      <div class="gotcha-num">13</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">SensorState.msg Is Orphaned TurtleBot3 Baggage</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">mecanumbot_msgs/msg/SensorState.msg</div>
+        <div class="gotcha-body">Copied directly from original <code>turtlebot3_msgs</code>. No node publishes or subscribes to it. Safe to ignore; do not delete unless you are sure no external tools depend on it.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="info" data-text="behaviour tree tick rate 100hz 10hz dog different state evaluation">
+      <div class="gotcha-num">14</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">Behaviour Tree Tick Rates Differ Significantly</span>
+          <span class="badge badge-blue">Info</span>
+        </div>
+        <div class="gotcha-file">bottom_up_tree.py (100 Hz), dog_tree.py (10 Hz), ctrl_tree.py (100 Hz)</div>
+        <div class="gotcha-body">The dog tree ticks at 10 Hz — 10× slower than the others. Intentional to avoid flooding Nav2 with goals. But state changes (subject lost, goal succeeded) are only evaluated every 100 ms in dog mode.</div>
+      </div>
+    </div>
+
+    <div class="gotcha" data-sev="warn" data-text="mecanumbot_core_parameters.yaml missing file path mismatch launch">
+      <div class="gotcha-num">15</div>
+      <div class="gotcha-content">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span class="gotcha-title">mecanumbot_core_parameters.yaml File Was Not Found</span>
+          <span class="badge badge-yellow">Warning</span>
+        </div>
+        <div class="gotcha-file">launch_mecanumbot_base.launch.py</div>
+        <div class="gotcha-body">The launch file references <code>mecanumbot_description/param/mecanumbot_core_parameters.yaml</code> but this file was not found at that path. The actual config lives in <code>mecanumbot.yaml</code> in the same directory. Either generated at build time or the launch file has a path mismatch. Verify before deploying.</div>
+      </div>
+    </div>
+
+  </div><!-- /gotcha-grid -->
+</section>
+
+</div><!-- /main -->
+
+<script>
+// ── COUNTER ANIMATION ──
+document.addEventListener('DOMContentLoaded', () => {
+  const counters = document.querySelectorAll('.stat-num[data-target]');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target, target = +el.dataset.target;
+      let n = 0, step = Math.ceil(target / 30);
+      const t = setInterval(() => {
+        n = Math.min(n + step, target);
+        el.textContent = n;
+        if (n >= target) clearInterval(t);
+      }, 40);
+      io.unobserve(el);
+    });
+  });
+  counters.forEach(c => io.observe(c));
+
+  // ── ACTIVE NAV ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const sio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+e.target.id));
+      }
+    });
+  }, {threshold: 0.25});
+  sections.forEach(s => sio.observe(s));
+
+  // ── GLOBAL SEARCH ──
+  document.getElementById('global-search').addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    if (!q) { clearHighlights(); return; }
+    clearHighlights();
+    highlightText(document.getElementById('main'), q);
+  });
+});
+
+// ── CARD TOGGLE ──
+function toggleCard(card) {
+  // Don't toggle if click was on a button inside
+  card.classList.toggle('open');
+}
+
+// ── TAB SWITCH ──
+function switchTab(tab, panelId) {
+  tab.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  const section = tab.closest('section');
+  section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  section.querySelector('#'+panelId).classList.add('active');
+}
+
+// ── TABLE FILTER ──
+function filterTable(input, tableId) {
+  const q = input.value.toLowerCase();
+  document.querySelectorAll('#'+tableId+' tr:not(:first-child)').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+// ── GOTCHA FILTER ──
+let activeSev = 'all';
+function filterGotchas() {
+  const q = document.getElementById('gotcha-search').value.toLowerCase();
+  document.querySelectorAll('.gotcha').forEach(g => {
+    const text = (g.dataset.text + ' ' + g.textContent).toLowerCase();
+    const sevOk = activeSev === 'all' || g.dataset.sev === activeSev;
+    const textOk = !q || text.includes(q);
+    g.classList.toggle('hidden', !(sevOk && textOk));
+  });
+}
+function filterSev(btn, sev) {
+  activeSev = sev;
+  btn.closest('.filter-bar').querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterGotchas();
+}
+
+// ── COPY BTN ──
+function copyPre(btn, e) {
+  e.stopPropagation();
+  const pre = btn.closest('.copy-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ── SEARCH HIGHLIGHT ──
+function highlightText(root, query) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    if (!node.parentElement || ['SCRIPT','STYLE','CODE'].includes(node.parentElement.tagName)) return;
+    const text = node.textContent;
+    const idx = text.toLowerCase().indexOf(query);
+    if (idx === -1) return;
+    const span = document.createElement('span');
+    span.innerHTML = text.slice(0,idx)+'<mark class="hl">'+text.slice(idx,idx+query.length)+'</mark>'+text.slice(idx+query.length);
+    node.parentNode.replaceChild(span, node);
+  });
+}
+function clearHighlights() {
+  document.querySelectorAll('mark.hl').forEach(m => {
+    const text = document.createTextNode(m.textContent);
+    m.parentNode.replaceChild(text, m);
+  });
+}
+</script>
+</body>
+</html>

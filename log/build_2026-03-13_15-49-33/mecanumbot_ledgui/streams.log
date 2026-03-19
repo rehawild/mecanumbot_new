@@ -1,0 +1,28 @@
+[1.710s] Invoking command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui': CMAKE_PREFIX_PATH=/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_msgs:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_bringup:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_description:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/build --no-deps symlink_data
+[2.159s] running develop
+[2.373s] running egg_info
+[2.373s] creating mecanumbot_ledgui.egg-info
+[2.373s] writing mecanumbot_ledgui.egg-info/PKG-INFO
+[2.374s] writing dependency_links to mecanumbot_ledgui.egg-info/dependency_links.txt
+[2.374s] writing entry points to mecanumbot_ledgui.egg-info/entry_points.txt
+[2.374s] writing requirements to mecanumbot_ledgui.egg-info/requires.txt
+[2.374s] writing top-level names to mecanumbot_ledgui.egg-info/top_level.txt
+[2.374s] writing manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+[2.376s] reading manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+[2.377s] writing manifest file 'mecanumbot_ledgui.egg-info/SOURCES.txt'
+[2.383s] running build_ext
+[2.384s] Creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/python3.10/site-packages/mecanumbot-ledgui.egg-link (link to .)
+[2.388s] Installing mecanumbot_ledgui script to /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/mecanumbot_ledgui
+[2.390s] 
+[2.391s] Installed /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui
+[2.391s] running symlink_data
+[2.392s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index
+[2.393s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index
+[2.393s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index/packages
+[2.394s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/resource/mecanumbot_ledgui -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/ament_index/resource_index/packages
+[2.395s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/package.xml -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui
+[2.395s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/launch
+[2.396s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/launch/mecanumbot_ledgui.launch.py -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/launch
+[2.396s] creating /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/configs
+[2.397s] symbolically linking /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/configs/led_configs.json -> /home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/share/mecanumbot_ledgui/configs
+[2.466s] Invoked command in '/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui' returned '0': CMAKE_PREFIX_PATH=/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_msgs:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_bringup:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_description:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_behaviours PYTHONPATH=/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/rehawild/Desktop/mecanumbot_new/install/mecanumbot_ledgui/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_ledgui/build --no-deps symlink_data

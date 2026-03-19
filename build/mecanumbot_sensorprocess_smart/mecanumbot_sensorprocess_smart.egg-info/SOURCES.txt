@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+config/lidar_peopledetect_config.yaml
+launch/mecanumbot_peopledetect.launch.py
+mecanumbot_sensorprocess_smart/__init__.py
+mecanumbot_sensorprocess_smart/mecanumbot_lidar_detect_people.py
+mecanumbot_sensorprocess_smart.egg-info/PKG-INFO
+mecanumbot_sensorprocess_smart.egg-info/SOURCES.txt
+mecanumbot_sensorprocess_smart.egg-info/dependency_links.txt
+mecanumbot_sensorprocess_smart.egg-info/entry_points.txt
+mecanumbot_sensorprocess_smart.egg-info/requires.txt
+mecanumbot_sensorprocess_smart.egg-info/top_level.txt
+mecanumbot_sensorprocess_smart.egg-info/zip-safe
+models/dr_spaam_5_on_frog.pth
+resource/mecanumbot_sensorprocess_smart

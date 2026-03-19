@@ -1,0 +1,6 @@
+[console_scripts]
+LED_leading_bt_node = mecanumbot_leading_behaviour.tree_nodes.LED_tree:main
+bottom_up_tree_node = mecanumbot_leading_behaviour.tree_nodes.bottom_up_tree:main
+control_leading_bt_node = mecanumbot_leading_behaviour.tree_nodes.ctrl_tree:main
+doglike_leading_bt_node = mecanumbot_leading_behaviour.tree_nodes.dog_tree:main
+

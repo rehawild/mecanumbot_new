@@ -1,0 +1,14 @@
+package.xml
+setup.cfg
+setup.py
+mecanumbot_core/__init__.py
+mecanumbot_core/mecanumbot_IO_node.py
+mecanumbot_core/mecanumbot_sensorproc_node.py
+mecanumbot_core.egg-info/PKG-INFO
+mecanumbot_core.egg-info/SOURCES.txt
+mecanumbot_core.egg-info/dependency_links.txt
+mecanumbot_core.egg-info/entry_points.txt
+mecanumbot_core.egg-info/requires.txt
+mecanumbot_core.egg-info/top_level.txt
+mecanumbot_core.egg-info/zip-safe
+resource/mecanumbot_core

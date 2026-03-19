@@ -1,0 +1,3 @@
+[console_scripts]
+mecanumbot_lidar_detect_people = mecanumbot_sensorprocess_smart.mecanumbot_lidar_detect_people:main
+

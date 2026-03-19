@@ -1,0 +1,4 @@
+[console_scripts]
+accessory_monitor = mecanumbot_monitor.accessory_monitor:main
+wheel_monitor = mecanumbot_monitor.wheel_monitor:main
+

@@ -1,0 +1,1 @@
+/home/rehawild/Desktop/mecanumbot_new/build/mecanumbot_msgs/ament_cmake_environment_hooks/local_setup.zsh

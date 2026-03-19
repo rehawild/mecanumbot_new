@@ -1,0 +1,6 @@
+setup.py
+mecanumbot_msgs/__init__.py
+mecanumbot_msgs.egg-info/PKG-INFO
+mecanumbot_msgs.egg-info/SOURCES.txt
+mecanumbot_msgs.egg-info/dependency_links.txt
+mecanumbot_msgs.egg-info/top_level.txt
